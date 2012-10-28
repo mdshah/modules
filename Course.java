@@ -14,7 +14,6 @@ public class Course {
 		this.courseNum=courseNum;		
 	}
 
-
 	public String getName() {
 		return name;
 	}

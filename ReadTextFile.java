@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -16,7 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
-import org.jsoup.Jsoup.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -34,6 +32,7 @@ public class ReadTextFile
 {
 	public static List<Course> courseList;
 	public static final boolean DEBUG = false;
+	
 	/**
 	 * getContentsArr -  returns the array of urls in strings
 	 * @param aFile
@@ -79,6 +78,7 @@ public class ReadTextFile
 			output.close();
 		}
 	}
+	
     public static void main(String args[]) throws IOException,java.net.SocketTimeoutException
     {
     	File urlFile = new File("g4_Biology_Updated.txt");
@@ -120,9 +120,13 @@ public class ReadTextFile
 	
 	        } 
     	}
+    	
     	for(Course c : courseList){
     		System.out.println(c.getDesc());
     	}
+    	
+    	DataAnalyzer courses = new DataAnalyzer(courseList);
+    	courses.createFeatureVector();
 //    	File outFile = new File("out.txt");
 //    	writeFile(outFile,output.toString());
     	System.out.println("Done!");
