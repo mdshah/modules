@@ -32,6 +32,7 @@ import org.jsoup.select.Elements;
  */
 public class ReadTextFile 
 {
+	public static List<Course> courseList;
 	public static final boolean DEBUG = false;
 	/**
 	 * getContentsArr -  returns the array of urls in strings
@@ -90,7 +91,7 @@ public class ReadTextFile
     	
 //    	String courseNumPattern = "courseNumber|courseNum|description|name|title|desc";
     	String courseNumPattern = "description|desc";
-    	List<Course> courseList = new LinkedList<Course>();
+    	courseList = new LinkedList<Course>();
     	
     	Pattern p = Pattern.compile(courseNumPattern,Pattern.CASE_INSENSITIVE);
     	StringBuilder output = new StringBuilder();
@@ -107,10 +108,10 @@ public class ReadTextFile
 	        	Matcher m = p.matcher(element.className());
 	        	if(m.find()){
 		          	if(!element.text().equals("")){
-		          		System.out.println("matched by: " + m.group());
-			          	System.out.println("| text | "+ element.text());
-			          	output.append(element.text());
-			          	output.append(System.getProperty("line.separator"));
+		          		log("matched by: " + m.group());
+			          	log("| text | "+ element.text());
+//			          	output.append(element.text());
+//			          	output.append(System.getProperty("line.separator"));
 			          	Course c = new Course();
 			          	c.setDesc(element.text());
 			          	courseList.add(c);
@@ -119,8 +120,11 @@ public class ReadTextFile
 	
 	        } 
     	}
-    	File outFile = new File("out.txt");
-    	writeFile(outFile,output.toString());
+    	for(Course c : courseList){
+    		System.out.println(c.getDesc());
+    	}
+//    	File outFile = new File("out.txt");
+//    	writeFile(outFile,output.toString());
     	System.out.println("Done!");
     }
 }
