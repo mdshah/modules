@@ -28,4 +28,8 @@ public class University {
 		this.url = url;
 	}	
 	
+	public String toString(){
+		return "University:[" + url + "] | " + "numberOfCourses:" + courses.size();
+	}
+	
 }

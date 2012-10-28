@@ -26,13 +26,13 @@ import org.jsoup.select.Elements;
 
 /**
  *
- * @author Jay
+ * @author Jay, Manushi, Albert
  */
 public class ReadTextFile 
 {
-	public static List<Course> courseList;
 	public static final boolean DEBUG = false;
-	
+	public static List<Course> courseList;
+	public static List<University> universityList = new LinkedList<University>();
 	/**
 	 * getContentsArr -  returns the array of urls in strings
 	 * @param aFile
@@ -95,12 +95,16 @@ public class ReadTextFile
     	
     	Pattern p = Pattern.compile(courseNumPattern,Pattern.CASE_INSENSITIVE);
     	StringBuilder output = new StringBuilder();
-    	for (String test : urlArr){
-	    	System.out.println("TESTING: " + test);
+    	
+    	
+    	for (String url : urlArr){
+	    	System.out.println("TESTING: " + url);
 	    	System.out.println("--------------------------------------------------");
-	    	Document doc = Jsoup.connect(test).get();
+	    	Document doc = Jsoup.connect(url).get();
 	        Elements coursesCrap = doc.select("[class~=(?i)course]");
 	        
+	        University univ = new University(url);
+	        universityList.add(univ);
 	        /* go through each element and see if it contains
 	        	description
 	        */ 
@@ -115,14 +119,19 @@ public class ReadTextFile
 			          	Course c = new Course();
 			          	c.setDesc(element.text());
 			          	courseList.add(c);
+			          	univ.addCourse(c);
 		          	}
 	        	} 
 	
 	        } 
     	}
     	
-    	for(Course c : courseList){
-    		System.out.println(c.getDesc());
+//    	for(Course c : courseList){
+//    		System.out.println(c.getDesc());
+//    	}
+//    	
+    	for(University u : universityList){
+    		System.out.println(u);
     	}
     	
     	DataAnalyzer courses = new DataAnalyzer(courseList);
