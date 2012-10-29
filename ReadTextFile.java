@@ -134,8 +134,7 @@ public class ReadTextFile
     		System.out.println(u);
     	}
     	
-    	DataAnalyzer courses = new DataAnalyzer(courseList);
-    	courses.createFeatureVector();
+    	DataAnalyzer courses = new DataAnalyzer(universityList);
 //    	File outFile = new File("out.txt");
 //    	writeFile(outFile,output.toString());
     	System.out.println("Done!");
