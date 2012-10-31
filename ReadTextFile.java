@@ -167,9 +167,9 @@ public class ReadTextFile
     		if(u.getCourses().size() == 0)
     			firstFilterFailed.add(u);
     	    	
-//    	Filter trFitler = new TableLengthFilter();
-//    	for(University u : firstFilterFailed)
-//    		applyFilter(u, trFitler);
+    	Filter trFitler = new TableLengthFilter();
+    	for(University u : firstFilterFailed)
+    		applyFilter(u, trFitler);
     	 	
     	for(University u : universityList){
     		log(u.toString());
