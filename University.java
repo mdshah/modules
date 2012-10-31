@@ -1,15 +1,19 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.nodes.Document;
+
 
 public class University {
 	
+	private Document doc;
 	private List<Course> courses;
-	private String url;
+	private String id;
 	
-	public University(String url) {
-		courses = new ArrayList<Course>();
-		this.url = url; 
+	public University(String id, Document doc) {
+		this.courses = new ArrayList<Course>();
+		this.id = id; 
+		this.doc = doc;
 	}
 	
 	public void addCourse(Course c) {
@@ -20,16 +24,15 @@ public class University {
 		return courses;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getId() {
+		return id;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
-	}	
-	
+	public Document getDoc(){
+		return doc;
+	}
 	public String toString(){
-		return "University:[" + url + "] | " + "numberOfCourses:" + courses.size();
+		return "University:[" + id + "] | " + "numberOfCourses:" + courses.size();
 	}
 	
 }

@@ -3,6 +3,7 @@ import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,10 +33,10 @@ import org.jsoup.select.Elements;
  */
 public class ReadTextFile 
 {
-	public static final boolean DEBUG = false;
-	public static List<Course> courseList;
+	public static final boolean DEBUG = true;
+	public static final boolean SAVE = true;
+	public static final boolean OVERWRITE=false;
 	public static List<University> universityList = new LinkedList<University>();
-	public static Map<String, Document> url2Doc = new HashMap<String,Document>();
 	/**
 	 * getContentsArr -  returns the array of urls in strings
 	 * @param aFile
@@ -58,6 +59,20 @@ public class ReadTextFile
 			ex.printStackTrace();
 		}
 		return urlList.toArray(new String[0]);
+	}
+	
+	public static String getContents(File aFile) throws FileNotFoundException {
+		StringBuilder contents = new StringBuilder();
+		BufferedReader br = new BufferedReader(new FileReader(aFile));
+		try {
+			String line = null;
+			while(( line = br.readLine()) != null ){
+				contents.append(line);
+			}
+		} catch(IOException ex){
+			ex.printStackTrace();
+		}
+		return contents.toString();
 	}
 	
 	/**
@@ -92,52 +107,61 @@ public class ReadTextFile
         else
             return s;
     }
+    
+    private static void applyFilter(University university, Filter filter){
+		Document doc = university.getDoc();
+		List<Course> courseList = new LinkedList<Course>();
+    	courseList = filter.apply(doc);
+    	for(Course c : courseList) {
+    		university.addCourse(c);
+    	}
+    }
     public static void main(String args[]) throws IOException,java.net.SocketTimeoutException
     {
     	File urlFile = new File("g4_Biology_Updated.txt");
     	
     	// obtain the array of urls
-    	String[] urlArr = getContentsArr(urlFile);
-    	
-    	//--------------------------First Filter: Using a "class" name in html ------------------------
-//    	String courseNumPattern = "courseNumber|courseNum|description|name|title|desc";
-    	String courseNumPattern = "description|desc";
-    	courseList = new LinkedList<Course>();
-    	
-    	Pattern p = Pattern.compile(courseNumPattern,Pattern.CASE_INSENSITIVE);
+    	String[] urlArr = getContentsArr(urlFile);    	
     	StringBuilder output = new StringBuilder();
     	
-    	for (String url : urlArr){
-	    	System.out.println("TESTING: " + url);
-	    	System.out.println("--------------------------------------------------");
-	    	Document doc = Jsoup.connect(url).get();
-	        Elements coursesCrap = doc.select("[class~=(?i)course]");
-	        
-	        //Store HTML docs for a later use
-	        url2Doc.put(url, doc);
-	        
-	        //Update the university list
-	        University univ = new University(url);
-	        universityList.add(univ);
-	        
-	        /* go through each element and see if it contains
-	        	description
-	        */ 
-	        for (Element element : coursesCrap) {
-	        	Matcher m = p.matcher(element.className());
-	        	if(m.find()){
-		          	if(!element.text().equals("")){
-		          		log("matched by: " + m.group());
-			          	log("| text | "+ element.text());
-			          	Course c = new Course();
-			          	c.setDesc(element.text());
-			          	courseList.add(c);
-			          	univ.addCourse(c);
-		          	}
-	        	} 
-	
-	        } 
+    	log("---------------------------Loading HTML Docs-----------------------");
+    	//Loading up HTML Files
+    	File htmlDir = new File("html");
+    	if(OVERWRITE){
+    		//check if the directory is present
+    		if(!htmlDir.exists())
+    			htmlDir.mkdir();
+    		for (int i=0; i < urlArr.length; i++){
+    			Document doc = Jsoup.connect(urlArr[i]).get();
+
+    			String dirName = "html";
+    			String fileName = "Univ" + i + ".html";
+    			String path = dirName + "//" + fileName;
+    			File aFile = new File(path);
+    			writeFile(aFile, doc.toString());
+    			
+    			
+    	    	University univ = new University(fileName, doc);
+    	    	universityList.add(univ);
+        	}
+    	} else {
+    		//check if the files are there
+    		if(!htmlDir.exists())
+    			throw new FileNotFoundException("No html files found! Please turn on the overwrite flags to download the files first");
+    		
+    		for(File f : htmlDir.listFiles()){
+    			System.out.println(f);
+    			Document doc = Jsoup.parse(getContents(f));
+    			University univ = new University(f.getName(), doc);
+    	    	universityList.add(univ);
+    		}
     	}
+    	
+    	log("--------------------ALL Documents Successfully Loaded");
+    	//--------------------------First Filter: Using a "class" name in html ------------------------
+    	Filter descFilter = new ClassByDescFilter();
+    	for(University u : universityList)
+    		applyFilter(u, descFilter);
     	
     	//--------------------------Second Filter: Brute force HTML Parsing ------------------------
     	//for those have zero courses. we will use more brute force approach to get the data
@@ -145,42 +169,18 @@ public class ReadTextFile
     	for(University u : universityList)
     		if(u.getCourses().size() == 0)
     			firstFilterFailed.add(u);
-    	 
-    	for(University u : firstFilterFailed){
-    		Document doc = url2Doc.get(u.getUrl());
-    		System.out.println("URL: " + u.getUrl());
-    		System.out.println("Title" + doc.title());
-    		// System.out.println("Body" + doc.body());
-    		// System.out.println("head" + doc.head());
-    		// System.out.println("nodeName" + doc.nodeName());
-     		Elements links = doc.select("a[href]");
-//     		Elements media = doc.select("[src]");
-//     		Elements imports = doc.select("link[href]");
-//			 print("\nMedia: (%d)", media.size());
-//	         for (Element src : media) {
-//	             if (src.tagName().equals("img"))
-//	                 print(" * %s: <%s> %sx%s (%s)",
-//	                         src.tagName(), src.attr("abs:src"), src.attr("width"), src.attr("height"),
-//	                         trim(src.attr("alt"), 20));
-//	             else
-//	                 print(" * %s: <%s>", src.tagName(), src.attr("abs:src"));
-//	         }
-
-	  //       print("\nImports: (%d)", imports.size());
-	  //       for (Element link : imports) {
-	  //           print(" * %s <%s> (%s)", link.tagName(),link.attr("abs:href"), link.attr("rel"));
-	  //       }
-//
-//       		print("\nLinks: (%d)", links.size());
-//			 for (Element link : links) {
-//			     print(" * a: <%s>  (%s)", link.attr("abs:href"), trim(link.text(), 35));
-//			 }
-    		System.out.println("--------------------------------------------------");
-    	}
-    	
+    	    	
+//    	Filter trFitler = new TableLengthFilter();
+//    	for(University u : firstFilterFailed)
+//    		applyFilter(u, trFitler);
     	 	
     	for(University u : universityList){
     		log(u.toString());
+    	}
+    	
+    	List<Course> courseList = new LinkedList<Course>();
+    	for(University u : universityList){
+    		courseList.addAll(u.getCourses());
     	}
     	
     	DataAnalyzer courses = new DataAnalyzer(courseList);
