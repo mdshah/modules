@@ -176,15 +176,10 @@ public class ReadTextFile
     	 	
     	for(University u : universityList){
     		log(u.toString());
-    	}
+    	} 
     	
-    	List<Course> courseList = new LinkedList<Course>();
-    	for(University u : universityList){
-    		courseList.addAll(u.getCourses());
-    	}
-    	
-    	DataAnalyzer courses = new DataAnalyzer(courseList);
-    	courses.createFeatureVector();
+    	DataAnalyzer courses = new DataAnalyzer(universityList);
+
 //    	File outFile = new File("out.txt");
 //    	writeFile(outFile,output.toString());
     	System.out.println("Done!");
