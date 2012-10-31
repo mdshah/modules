@@ -34,7 +34,6 @@ import org.jsoup.select.Elements;
 public class ReadTextFile 
 {
 	public static final boolean DEBUG = true;
-	public static final boolean SAVE = true;
 	public static final boolean OVERWRITE=false;
 	public static List<University> universityList = new LinkedList<University>();
 	/**
@@ -127,7 +126,8 @@ public class ReadTextFile
     	log("---------------------------Loading HTML Docs-----------------------");
     	//Loading up HTML Files
     	File htmlDir = new File("html");
-    	if(OVERWRITE){
+    	if(!htmlDir.exists() || OVERWRITE){
+    		log("File's are being downloaded into html folder...");
     		//check if the directory is present
     		if(!htmlDir.exists())
     			htmlDir.mkdir();
@@ -144,11 +144,8 @@ public class ReadTextFile
     	    	University univ = new University(fileName, doc);
     	    	universityList.add(univ);
         	}
+    		log("done downloading!");
     	} else {
-    		//check if the files are there
-    		if(!htmlDir.exists())
-    			throw new FileNotFoundException("No html files found! Please turn on the overwrite flags to download the files first");
-    		
     		for(File f : htmlDir.listFiles()){
     			System.out.println(f);
     			Document doc = Jsoup.parse(getContents(f));
