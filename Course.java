@@ -10,14 +10,40 @@ public class Course {
 	private HashMap<String, Integer> termFreq;
 	private double norm; 
 	
-	public Course() {
+	private Course(Builder builder) {
+		name = builder.name;
+		school = builder.school;
+		courseNum = builder.courseNum;
+		desc = builder.desc;
 		
 	}
 	
-	public Course(String name, String school, String courseNum) {
-		this.name = name;
-		this.school=school;
-		this.courseNum=courseNum;		
+	public static class Builder{
+		private String school;
+		private String name="NA";
+		private String courseNum="NA";
+		private String desc="NA";
+		private HashMap<String, Double> weightVector;
+		private HashMap<String, Integer> termFreq;
+		private double norm; 
+		
+		public Builder(String school){
+			this.school = school;
+		}
+		public Builder name(String name){
+			this.name = name;return this;
+		}
+		public Builder courseNum(String courseNum){
+			this.courseNum = courseNum;return this;
+		}
+		public Builder desc(String desc){
+			this.desc = desc;return this;
+		}
+		public Course build(){
+			return new Course(this);
+		}
+		
+		
 	}
 
 	public String getName() {
@@ -36,21 +62,6 @@ public class Course {
 		return desc;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public void setSchool(String school) {
-		this.school = school;
-	}
-	
-	public void setCourseNum(String courseNum) {
-		this.courseNum = courseNum;
-	}
-	
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
 	
 	public HashMap<String, Double> getWeightVector() {
 		return weightVector;
@@ -79,5 +90,13 @@ public class Course {
 	
 	public double getL2Norm() {
 		return norm;
+	}
+	
+	public String toString(){
+		return "-------------------\n" +
+				"[School]" + school + "\n" +
+			   "[Name]" + name + "\n" +
+			   "[CourseNum]" + courseNum + "\n" +
+			   "[Desc]" + desc;
 	}
 }

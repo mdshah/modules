@@ -28,8 +28,7 @@ public class ClassByDescFilter implements Filter{
 	          	if(!element.text().equals("")){
 	          		log("matched by: " + m.group());
 		          	log("| text | "+ element.text());
-		          	Course c = new Course();
-		          	c.setDesc(element.text());
+		          	Course c = new Course.Builder(doc.title()).desc(element.text()).build();
 		          	courseList.add(c);
 	          	}
         	} 

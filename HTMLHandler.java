@@ -27,13 +27,6 @@ public class HTMLHandler {
 	public Elements getElements(){
 		return elements;
 	}
-	public void printText(){
-		for(Element courseInfo : elements) {
-			Course course = new Course();
-			course.setDesc(courseInfo.text());
-			System.out.println("Text:" + courseInfo.text());
-		}
-	}
 	
 	public static Document getHTMLfromFile(File aFile) throws FileNotFoundException {
 		StringBuilder contents = new StringBuilder();
