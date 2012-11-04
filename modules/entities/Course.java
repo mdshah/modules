@@ -1,13 +1,11 @@
 package modules.entities;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
-
 import modules.NLPParsing.Sentence;
 import modules.NLPParsing.TextParser;
-import opennlp.tools.parser.Parse;
 import opennlp.tools.util.InvalidFormatException;
 
 /**
