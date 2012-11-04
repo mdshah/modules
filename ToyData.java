@@ -1,6 +1,9 @@
+import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import opennlp.tools.util.InvalidFormatException;
 
 /**
  * ToyData that has all the information cleanly. This class will be used in NLP as if we have perfectly structured data
@@ -10,7 +13,7 @@ import java.util.List;
 public class ToyData {
 	List<Course> courseList;
 	
-	public ToyData() {
+	public ToyData() throws InvalidFormatException, IOException {
 		courseList = new LinkedList<Course>();
 		generateToyCourse();
 	}
@@ -25,9 +28,11 @@ public class ToyData {
 	 * 	Physiology and Neuroscience
 	 * 	Special Courses
 	 * 	Graduate
+	 * @throws IOException 
+	 * @throws InvalidFormatException 
 	 * 
 	 */
-	public void generateToyCourse(){
+	public void generateToyCourse() throws InvalidFormatException, IOException{
 		//Lower Division
 
 		Course c0 = new Course.Builder("ucsd").courseNum("BILD 1").name("The Cell").desc("An introduction to cellular structure and function, to biological molecules, bioenergetics, to the genetics of both procaryotic and eucaryotic organisms, and to the elements of molecular biology. Three hours of lecture and one hour of recitation. Prerequisites: Chem 6A; Chem 6B may be taken concurrently.").build();
@@ -664,8 +669,10 @@ public class ToyData {
 	 * returns the random sample of N courses from the courseList
 	 * @param size
 	 * @return
+	 * @throws IOException 
+	 * @throws InvalidFormatException 
 	 */
-	public List<Course> sample(int size){
+	public List<Course> sample(int size) throws InvalidFormatException, IOException{
 		List<Course> fromThisList = new ToyData().getCourseList();
 		List<Course> sample = new LinkedList<>();
 		Collections.shuffle(fromThisList);
@@ -675,7 +682,7 @@ public class ToyData {
 		return sample;
 		
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		ToyData td = new ToyData();
 		
@@ -684,8 +691,11 @@ public class ToyData {
 		
 		//Take random sample of 5 courses
 		List<Course> sample = td.sample(5);
-		for(Course c : sample)
+		for(Course c : sample){
 			System.out.println(c);
+			for(Sentence s : c.getDescParsed())
+				System.out.println(s.getNouns());
+		}
 		
 	}
 }

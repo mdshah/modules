@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import opennlp.tools.util.InvalidFormatException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -94,7 +97,7 @@ public class ReadTextFile
             return s;
     }
     
-    private static void applyFilter(University university, Filter filter){
+    private static void applyFilter(University university, Filter filter) throws InvalidFormatException, IOException{
 		Document doc = university.getDoc();
 		List<Course> courseList = new LinkedList();
     	courseList = filter.apply(doc);
