@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -24,6 +27,8 @@ public class DataAnalyzer {
 		computeTF_IDF();
 		computeWeightVectors();
 		computeCosineSimilarity();
+		createDotFile(createModuleStructure());
+		generateMap("modules");
 	}
 
 	/**
@@ -42,7 +47,7 @@ public class DataAnalyzer {
 			e.printStackTrace();
 		} 
 	}
-
+	
 	private void calculateN() { 
 		for(University u : universities) 
 			n += u.getCourses().size();
@@ -118,5 +123,66 @@ public class DataAnalyzer {
 			similarCourses.put(orig, simCourses);
 		}
 		System.out.print("");
+	}
+	
+	public static Map<String, Integer> sortByValue(Map<String, Integer> map) {
+        List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(map.entrySet());
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            public int compare(Map.Entry<String, Integer> m1, Map.Entry<String, Integer> m2) {
+                return (m2.getValue()).compareTo(m1.getValue());
+            }
+        });
+
+        Map<String, Integer> result = new LinkedHashMap<String, Integer>();
+        for (Map.Entry<String, Integer> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
+	
+	public List<Module> createModuleStructure() {
+		List<Module> list = new ArrayList<Module>();
+		
+		Map<String, Integer> wordFreq = sortByValue(freq_term);
+		int count = 0; 
+		//consider top 30 frequent terms
+		for(String s : wordFreq.keySet()) {
+			if(count > 30) continue;
+			Module m = new Module(s);
+			list.add(m);
+			count++;
+		}
+		
+		//add children to each module based on preReqs
+		return list;
+	}
+	
+	public void createDotFile(List<Module> modules) {
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter("modules.dot", false));
+			out.write("graph {" + "\n");
+			for(Module module : modules) {
+				if(module.getChildren().size() > 0)
+					for(Module child : module.getChildren())
+						out.write( module.getName() + " -- " + child.getName() + "\n");
+				else out.write( module.getName() + "\n");
+			}
+			out.write("}");
+			out.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	}
+	
+	public void generateMap(String fileName) {		
+        try {      	
+            String cmdline[] = {"/usr/bin/dot", "-Tpdf", fileName + ".dot", ">", fileName + ".pdf"};
+            Process p = Runtime.getRuntime().exec(cmdline);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
 	}
 }

@@ -7,8 +7,13 @@ import org.jsoup.nodes.Document;
 public class University {
 	
 	private Document doc;
-	private List<Course> courses;
+	List<Course> courses;
 	private String id;
+	
+	public University(String id) {
+		this.id = id;
+		this.courses = new ArrayList<Course>();
+	}
 	
 	public University(String id, Document doc) {
 		this.courses = new ArrayList<Course>();
