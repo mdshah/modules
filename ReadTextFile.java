@@ -10,41 +10,39 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
- * @author Jay, Manushi, Albert
+ * @author Jeremy, Manushi, Albert
  */
 public class ReadTextFile 
 {
 	public static final boolean DEBUG = true;
 	public static final boolean OVERWRITE=false;
-	public static List<University> universityList = new LinkedList<University>();
+	public static List<University> universityList = new LinkedList();
 	/**
 	 * getContentsArr -  returns the array of urls in strings
 	 * @param aFile
 	 * @return
 	 */
 	public static String[] getContentsArr(File aFile){
-		List<String> urlList = new LinkedList<String>();
+		List<String> urlList = new LinkedList();
 		try{
 			BufferedReader input = new BufferedReader(new FileReader(aFile));
 			try{
@@ -111,7 +109,7 @@ public class ReadTextFile
     
     private static void applyFilter(University university, Filter filter){
 		Document doc = university.getDoc();
-		List<Course> courseList = new LinkedList<Course>();
+		List<Course> courseList = new LinkedList();
     	courseList = filter.apply(doc);
     	for(Course c : courseList) {
     		university.addCourse(c);
@@ -156,6 +154,79 @@ public class ReadTextFile
     		}
     	}
     	
+    	//----------------------------Trying to see if there is a description
+//    	for(University u : universityList){
+//    		System.out.println("------------------------------------->" + u.getId());
+//    		Document d = u.getDoc();
+//    		Elements els = d.select("[class~=(?i).*desc.*]");
+//    		for(Element e : els){
+//    			System.out.println("e.text():  "+ e.text());
+//    			System.out.println("e.data():  " + e.data());
+//    			System.out.println("e.tagName(): " + e.tagName());
+//    			System.out.println("e.html(): " + e.html());
+//    			System.out.println("-------");
+//    		}
+//    		System.out.println("--------------------");
+//    	}
+ 
+    	//---------------------------Trying to classify HTML-----------------------
+    	List<Map<String,Integer>> featureList = new LinkedList<Map<String,Integer>>();
+    	Set<String> stopTags=new HashSet<String>();
+    	stopTags.add("html");
+    	stopTags.add("#root");
+    	stopTags.add("body");
+    	stopTags.add("head");
+    	
+    	Set<String> used = new HashSet<String>();
+    	for (University u : universityList) {
+    		System.out.println("id:" + u.getId());
+			Document doc = u.getDoc();
+			Elements el = doc.select("*");
+			Map<String,Integer> feature = new HashMap<String,Integer>();
+			for(Element e : el){
+				String tag = e.tagName();
+				if(feature.containsKey(tag)){
+					int count=feature.get(tag);
+					feature.put(tag, ++count);
+				} else {
+					feature.put(tag, 1);
+					used.add(tag);
+				}
+					
+				System.out.println("tagName: " + tag);
+			}
+			featureList.add(feature);
+		}
+    	
+    	//header
+    	Iterator<String> hitr = used.iterator();
+    	while(hitr.hasNext())
+    		System.out.print(hitr.next()+"\t");
+    	System.out.println();
+    	
+    	for(Map<String,Integer> feature : featureList){
+    		Iterator<String> itr = used.iterator();
+    		while(itr.hasNext()){
+    			String tag = itr.next();
+//    			System.out.print(tag+"\t");
+    			if(feature.containsKey(tag)){
+//    				System.out.print(String.format("%02d",feature.get(tag))+" ");
+    				System.out.print(feature.get(tag)+ "\t");
+    			}
+    			else
+    				System.out.print("0\t");
+//    			System.out.println();
+    		}
+    		System.out.println();
+//    		for (Map.Entry<String, Integer> entry : feature.entrySet()) {
+//    			System.out.println("Key: " + entry.getKey() + " --> Val:" + entry.getValue());
+//				
+//			}
+//    		System.exit(-1);
+    	}
+    	
+    	//---------------------------Trying to classify HTML ENDS-----------------------
+    	
     	log("--------------------ALL Documents Successfully Loaded");
     	//--------------------------First Filter: Using a "class" name in html ------------------------
     	Filter descFilter = new ClassByDescFilter();
@@ -164,18 +235,20 @@ public class ReadTextFile
     	
     	//--------------------------Second Filter: Brute force HTML Parsing ------------------------
     	//for those have zero courses. we will use more brute force approach to get the data
-    	List<University> firstFilterFailed = new LinkedList<University>();
-    	for(University u : universityList)
-    		if(u.getCourses().size() == 0)
-    			firstFilterFailed.add(u);
-    	    	
-    	Filter trFitler = new TableLengthFilter();
-    	for(University u : firstFilterFailed)
-    		applyFilter(u, trFitler);
-    	 	
-    	for(University u : universityList){
-    		log(u.toString());
-    	} 
+
+//    	List<University> firstFilterFailed = new LinkedList<University>();
+//    	for(University u : universityList)
+//    		if(u.getCourses().size() == 0)
+//    			firstFilterFailed.add(u);
+//    	    	
+//    	Filter trFitler = new TableLengthFilter();
+//    	for(University u : firstFilterFailed)
+//    		applyFilter(u, trFitler);
+//    	 	
+//    	for(University u : universityList){
+//    		log(u.toString());
+//    	} 
+
     	
     	University ucsd = new University("0");
     	ToyData td = new ToyData();
