@@ -23,8 +23,8 @@ public class WikiWrapper
         String search_formatted = search.replace(' ', '+');
         HashMap<String,Integer> wikiHits =  new HashMap();
         try { 
-            URL yahoo = new URL("http://en.wikipedia.org/w/api.php?action=opensearch&search=" + search_formatted); 
-            BufferedReader in = new BufferedReader(new InputStreamReader(yahoo.openStream())); 
+            URL wikipedia = new URL("http://en.wikipedia.org/w/api.php?action=opensearch&search=" + search_formatted); 
+            BufferedReader in = new BufferedReader(new InputStreamReader(wikipedia.openStream())); 
             String inputLine; 
             while ((inputLine = in.readLine()) != null) { 
                 String delim1 = "[,]";
@@ -79,8 +79,8 @@ public class WikiWrapper
         int wordsFound = 0;
         String pageTitle_Formatted = pageTitle.replace(' ', '_');
         try { 
-            URL yahoo = new URL("http://en.wikipedia.org/wiki/" + pageTitle_Formatted); 
-            BufferedReader in = new BufferedReader(new InputStreamReader(yahoo.openStream())); 
+            URL wikipedia = new URL("http://en.wikipedia.org/wiki/" + pageTitle_Formatted); 
+            BufferedReader in = new BufferedReader(new InputStreamReader(wikipedia.openStream())); 
             String inputLine; 
             while ((inputLine = in.readLine()) != null) {       
                 if(wordsFound == words.size())
