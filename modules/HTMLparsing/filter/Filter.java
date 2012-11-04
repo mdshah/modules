@@ -2,12 +2,9 @@ package modules.HTMLparsing.filter;
 
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
-
 import modules.entities.Course;
 import opennlp.tools.util.InvalidFormatException;
-
 import org.jsoup.nodes.Document;
 
 /**

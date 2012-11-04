@@ -1,11 +1,6 @@
 package modules.NLPParsing;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
-
 import modules.entities.Course;
 import modules.entities.Module;
 import modules.entities.University;

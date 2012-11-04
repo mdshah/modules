@@ -1,14 +1,21 @@
 package modules.NLPParsing;
-import java.util.*;
-import java.io.*;
-
-
-import opennlp.tools.sentdetect.*;
-import opennlp.tools.tokenize.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import opennlp.tools.chunker.ChunkerME;
+import opennlp.tools.chunker.ChunkerModel;
+import opennlp.tools.postag.POSModel;
+import opennlp.tools.postag.POSTaggerME;
+import opennlp.tools.sentdetect.SentenceDetectorME;
+import opennlp.tools.sentdetect.SentenceModel;
+import opennlp.tools.tokenize.Tokenizer;
+import opennlp.tools.tokenize.TokenizerME;
+import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.InvalidFormatException;
-import opennlp.tools.postag.*;
-import opennlp.tools.chunker.*;
-import opennlp.tools.parser.*;
 /**
  * This class parses the given description of the course
  * @author Albert
@@ -39,13 +46,13 @@ public class TextParser {
 		} catch(IOException ex) {
 			ex.printStackTrace();
 		}
-		List<Sentence> sentenceList = new LinkedList<Sentence>();
+		List<Sentence> sentenceList = new LinkedList();
 		String[] sentences = sentenceDetector.sentDetect(desc);		
 		for(String s : sentences) {
 			String[] tokens = tokenizer.tokenize(s);
 			String[] posTags = tagger.tag(tokens);
 			String[] chunks = chunker.chunk(tokens, posTags);
-			List<String> lemma = new ArrayList<String>();
+			List<String> lemma = new ArrayList();
 			for(String str : tokens) {
 				lemma.add(str.toLowerCase());
 			}

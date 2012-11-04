@@ -4,11 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
-
 import modules.HTMLparsing.HTMLHandler;
 import modules.HTMLparsing.ReadTextFile;
 import modules.entities.Course;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
