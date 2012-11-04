@@ -1,3 +1,6 @@
+package modules.HTMLparsing;
+
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -23,6 +26,12 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import modules.HTMLparsing.filter.ClassByDescFilter;
+import modules.HTMLparsing.filter.Filter;
+import modules.NLPParsing.DataAnalyzer;
+import modules.entities.Course;
+import modules.entities.University;
+import modules.testData.ToyData;
 import opennlp.tools.util.InvalidFormatException;
 
 import org.jsoup.Jsoup;
@@ -255,7 +264,7 @@ public class ReadTextFile
     	
     	University ucsd = new University("0");
     	ToyData td = new ToyData();
-    	ucsd.courses = td.courseList;
+    	ucsd.setCourses(td.getCourseList());
     	List<University> univ = new ArrayList<University>();
     	univ.add(ucsd);
     	

@@ -1,5 +1,7 @@
+package modules.entities;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import org.jsoup.nodes.Document;
 
@@ -7,7 +9,7 @@ import org.jsoup.nodes.Document;
 public class University {
 	
 	private Document doc;
-	List<Course> courses;
+	private List<Course> courses;
 	private String id;
 	
 	public University(String id) {
@@ -23,6 +25,10 @@ public class University {
 	
 	public void addCourse(Course c) {
 		courses.add(c);
+	}
+	
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
 	}
 	
 	public List<Course> getCourses() {
