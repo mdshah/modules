@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import modules.NLPParsing.PrereqParser;
 import modules.NLPParsing.Sentence;
 import modules.entities.Course;
 
@@ -697,6 +698,7 @@ public class ToyData {
 		List<Course> sample = td.sample(5);
 		for(Course c : sample){
 			System.out.println(c);
+			System.out.println("[PREREQUISITE]: " + PrereqParser.prereqOf(c.getDesc()));
 			for(Sentence s : c.getDescParsed()){
 				System.out.println("Bi-grams " + s.getNgrams(2));
 				System.out.println("Nouns: " + s.getNouns());
