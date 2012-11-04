@@ -2,8 +2,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -13,7 +11,7 @@ public class TableLengthFilter implements Filter {
 
 	@Override
 	public List<Course> apply(Document d) {
-		List<Course> courseList = new LinkedList<Course>();
+		List<Course> courseList = new LinkedList();
 		// System.out.println("Body" + doc.body());
 		// System.out.println("head" + doc.head());
 		// System.out.println("nodeName" + doc.nodeName())

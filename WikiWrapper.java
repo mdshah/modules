@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,7 +8,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author Jeremy Spencer
+ * @author Jeremy, Manushi, Albert
  */
 public class WikiWrapper 
 {
