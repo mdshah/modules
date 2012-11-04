@@ -13,9 +13,49 @@ import java.util.HashMap;
  */
 public class WikiWrapper 
 {
+    public static void main(String[] args)
+    {
+        /* example implementation of wiki wrapper */
+        WikiWrapper wrapper = new WikiWrapper();
+        ArrayList<String> words = new ArrayList();
+        HashMap<String,Integer> containedWords = new HashMap();
+        String pageTitle = "computer science";
+        System.out.println("Does wikipedia have a \"" + pageTitle +"\" page?: " + wrapper.hasWikiPage(pageTitle));
+        words.add("hash table");
+        words.add("data structures");
+        words.add("algorithms");
+        containedWords = wrapper.containWordsGivenPage(words, pageTitle);
+        for(int i = 0; i < words.size(); i ++)
+        {
+            System.out.println("Does the " + pageTitle + " wikipedia page contain: \"" + words.get(i) + "\"?  :" + containedWords.containsKey(words.get(i)));
+        }
+        
+        
+        /* example 2 */
+        System.out.println("\n");
+        pageTitle = "biology";
+        words = new ArrayList();
+        words.add("organisms");
+        words.add("cell theory");
+        words.add("Anatomy");
+        words.add("scientific model");
+        words.add("natural selections");
+        words.add("natural selection");
+        System.out.println("Does wikipedia have a \"" + pageTitle +"\" page?: " + wrapper.hasWikiPage(pageTitle));
+        containedWords = wrapper.containWordsGivenPage(words, pageTitle);
+        for(int i = 0; i < words.size(); i ++)
+        {
+            System.out.println("Does the " + pageTitle + " wikipedia page contain: \"" + words.get(i) + "\"?  :" + containedWords.containsKey(words.get(i)));
+        }
+        
+        /* example 3 */
+        System.out.println("\n");
+        pageTitle = "bike wars";
+        System.out.println("Does wikipedia have a \"" + pageTitle +"\" page?: " + wrapper.hasWikiPage(pageTitle));
+    }
     public WikiWrapper()
     {
-        
+       
     }
     /* returns true for only exact string matches (case insensitive) */
     public boolean hasWikiPage(String search)
@@ -90,7 +130,7 @@ public class WikiWrapper
                     if(contains.containsKey(words.get(i)))
                         continue;
                     
-                    if(inputLine.contains(" " + words.get(i) + " "))
+                    if(inputLine.toLowerCase().contains(words.get(i).toLowerCase()))
                     {
                         contains.put(words.get(i), 1);
                         //System.out.println("contains: " + words.get(i));
