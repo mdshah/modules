@@ -67,4 +67,31 @@ import java.util.List;
 			}
 			return nouns;
 		}
+		
+		public List<String> getNgrams(int n){
+			List<String> ngrams = new LinkedList<String>();
+			for(int i=0; i < words.size()-n+1; i++){
+				StringBuilder sb = new StringBuilder();
+				for(int j=0; j < n; j++){
+					sb.append(words.get(i+j));
+					sb.append(" ");
+				}
+				ngrams.add(sb.toString());
+			}
+			return ngrams;
+		}
+		
+		public List<String> getNgramsPosTags(int n){
+			List<String> ngramsPosTags = new LinkedList<String>();
+			for(int i=0; i < posTags.size()-n+1; i++){
+				StringBuilder sb = new StringBuilder();
+				for(int j=0; j < n; j++){
+					sb.append(posTags.get(i+j));
+					sb.append(" ");
+				}
+				ngramsPosTags.add(sb.toString());
+			}
+			return ngramsPosTags;
+		}
+		
 	}

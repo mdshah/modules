@@ -693,8 +693,10 @@ public class ToyData {
 		List<Course> sample = td.sample(5);
 		for(Course c : sample){
 			System.out.println(c);
-			for(Sentence s : c.getDescParsed())
+			for(Sentence s : c.getDescParsed()){
 				System.out.println(s.getNouns());
+				System.out.println("Bi-grams " + s.getNgramsPosTags(2));
+			}
 		}
 		
 	}
