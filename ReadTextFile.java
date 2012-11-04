@@ -1,14 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Writer;
+import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,33 +9,27 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
- * @author Jay, Manushi, Albert
+ * @author Jeremy, Manushi, Albert
  */
 public class ReadTextFile 
 {
 	public static final boolean DEBUG = true;
 	public static final boolean OVERWRITE=false;
-	public static List<University> universityList = new LinkedList<University>();
+	public static List<University> universityList = new LinkedList();
 	/**
 	 * getContentsArr -  returns the array of urls in strings
 	 * @param aFile
 	 * @return
 	 */
 	public static String[] getContentsArr(File aFile){
-		List<String> urlList = new LinkedList<String>();
+		List<String> urlList = new LinkedList();
 		try{
 			BufferedReader input = new BufferedReader(new FileReader(aFile));
 			try{
@@ -112,7 +96,7 @@ public class ReadTextFile
     
     private static void applyFilter(University university, Filter filter){
 		Document doc = university.getDoc();
-		List<Course> courseList = new LinkedList<Course>();
+		List<Course> courseList = new LinkedList();
     	courseList = filter.apply(doc);
     	for(Course c : courseList) {
     		university.addCourse(c);
@@ -238,6 +222,7 @@ public class ReadTextFile
     	
     	//--------------------------Second Filter: Brute force HTML Parsing ------------------------
     	//for those have zero courses. we will use more brute force approach to get the data
+
 //    	List<University> firstFilterFailed = new LinkedList<University>();
 //    	for(University u : universityList)
 //    		if(u.getCourses().size() == 0)
@@ -250,6 +235,7 @@ public class ReadTextFile
 //    	for(University u : universityList){
 //    		log(u.toString());
 //    	} 
+
     	
     	DataAnalyzer courses = new DataAnalyzer(universityList);
 
