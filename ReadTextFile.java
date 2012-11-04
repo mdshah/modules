@@ -9,11 +9,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -175,7 +177,13 @@ public class ReadTextFile
     		log(u.toString());
     	} 
     	
-    	DataAnalyzer courses = new DataAnalyzer(universityList);
+    	University ucsd = new University("0");
+    	ToyData td = new ToyData();
+    	ucsd.courses = td.courseList;
+    	List<University> univ = new ArrayList<University>();
+    	univ.add(ucsd);
+    	
+    	DataAnalyzer courses = new DataAnalyzer(univ);
 
 //    	File outFile = new File("out.txt");
 //    	writeFile(outFile,output.toString());
