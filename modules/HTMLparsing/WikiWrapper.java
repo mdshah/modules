@@ -15,10 +15,11 @@ public class WikiWrapper
 {
     public static void main(String[] args)
     {
-        /* example implementation of wiki wrapper */
         WikiWrapper wrapper = new WikiWrapper();
         ArrayList<String> words = new ArrayList();
-        HashMap<String,Integer> containedWords = new HashMap();
+        HashMap<String,Integer> containedWords;
+        
+        /* example implementation of wiki wrapper */
         String pageTitle = "computer science";
         System.out.println("Does wikipedia have a \"" + pageTitle +"\" page?: " + wrapper.hasWikiPage(pageTitle));
         words.add("hash table");
@@ -32,7 +33,7 @@ public class WikiWrapper
         
         
         /* example 2 */
-        System.out.println("\n");
+        System.out.println("");
         pageTitle = "biology";
         words = new ArrayList();
         words.add("organisms");
@@ -49,7 +50,7 @@ public class WikiWrapper
         }
         
         /* example 3 */
-        System.out.println("\n");
+        System.out.println("");
         pageTitle = "bike wars";
         System.out.println("Does wikipedia have a \"" + pageTitle +"\" page?: " + wrapper.hasWikiPage(pageTitle));
     }
