@@ -1,31 +1,8 @@
 package modules.HTMLparsing;
 
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Writer;
-import java.util.ArrayList;
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import java.util.*;
 import modules.HTMLparsing.filter.ClassByDescFilter;
 import modules.HTMLparsing.filter.Filter;
 import modules.NLPParsing.DataAnalyzer;
@@ -33,7 +10,6 @@ import modules.entities.Course;
 import modules.entities.University;
 import modules.testData.ToyData;
 import opennlp.tools.util.InvalidFormatException;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

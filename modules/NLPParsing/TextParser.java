@@ -1,14 +1,12 @@
 package modules.NLPParsing;
-import java.util.*;
-import java.io.*;
-
-
-import opennlp.tools.sentdetect.*;
-import opennlp.tools.tokenize.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import opennlp.tools.util.InvalidFormatException;
-import opennlp.tools.postag.*;
-import opennlp.tools.chunker.*;
-import opennlp.tools.parser.*;
 /**
  * This class parses the given description of the course
  * @author Albert
