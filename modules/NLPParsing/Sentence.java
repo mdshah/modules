@@ -105,12 +105,18 @@ import java.util.Set;
 		 * @throws Exception 
 		 */
 		public List<String> getModuleEntity(int ngram) throws Exception{
-			List<String> ngramWORDList = getNgrams(ngram);
-			List<String> ngramPOSList = getNgramsPosTags(ngram);
-			if(ngramWORDList.size() != ngramPOSList.size())
+			List<String> words = getWords();
+			List<String> bigramWORDList = getNgrams(2);
+			List<String> bigramPOSList = getNgramsPosTags(2);
+			if(bigramWORDList.size() != bigramPOSList.size())
 				throw new Exception("SHOULD BE EQUAL!!");
 			Set<String> ruleset = new HashSet<String>();
 			
+			//to keep track of one words that are used as an entity
+			boolean[] used = new boolean[words.size()];
+			for(int i=0;i<used.length;i++)
+				used[i] = false;
+				
 			//define rules
 			//need to get more sophisticated
 			ruleset.add("JJ NN");
@@ -122,22 +128,41 @@ import java.util.Set;
 			ruleset.add("NNP NN"); //TCA Cycle
 			
 			List<String> moduleEntityList = new LinkedList<String>();
-			for(int i=0; i<ngramPOSList.size();i++){
-				if(ruleset.contains(ngramPOSList.get(i))){
-					String[] words = ngramWORDList.get(i).split(" ");
+			for(int i=0; i<bigramPOSList.size();i++){
+				if(ruleset.contains(bigramPOSList.get(i))){
+					String[] wordsSplits = bigramWORDList.get(i).split(" ");
 					boolean isStopword = false;
-					for(String s : words){
+					for(String s : wordsSplits){
 						if(Stopwords.isStopwordModule(s)){
 							isStopword = true;
 							break;
 						} 
 					}
-					if(!isStopword)
-						moduleEntityList.add(ngramWORDList.get(i));
+					if(!isStopword){
+						moduleEntityList.add(bigramWORDList.get(i).toLowerCase());
+						//bigram
+						used[i]=true;
+						used[i+1]=true;
+					}
 				}
 			}
 			
-			
+			ruleset.add("NN");
+			ruleset.add("NNS"); 
+			ruleset.add("NNP"); 
+			ruleset.add("NNPS"); 
+			List<String> unigramWORDList = getNgrams(1);
+			List<String> unigramPOSList = getNgramsPosTags(1);
+			//unigram
+			for(int i=0;i < used.length;i++){
+				if(used[i])
+					continue;
+				String uniwordPOS = unigramPOSList.get(i);
+				String uniword = unigramWORDList.get(i);
+				if(ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) && Stopwords.isValidWord(uniword.toLowerCase())){
+						moduleEntityList.add(uniword.toLowerCase());
+				}
+			}
 			
 			return moduleEntityList;
 			

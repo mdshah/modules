@@ -693,17 +693,17 @@ public class ToyData {
 //		td.print();
 		
 		//Take random sample of 5 courses
-//		List<Course> sample = td.sample(10);
-//		for(Course c : sample){
-//			System.out.println(c);
-//			System.out.println("[PREREQUISITE]: " + PrereqParser.prereqOf(c.getDesc()));
-//			for(Sentence s : c.getDescParsed()){
-//				System.out.println("Bi-grams " + s.getNgrams(2));
-//				System.out.println("Bi-grams_POS" + s.getNgramsPosTags(2));
-//				System.out.println("Nouns: " + s.getNouns());
-//				System.out.println("Module Entity:" + s.getModuleEntity(2));
-//			}
-//		}
+		List<Course> sample = td.sample(20);
+		for(Course c : sample){
+			System.out.println(c);
+			System.out.println("[PREREQUISITE]: " + PrereqParser.prereqOf(c.getDesc()));
+			for(Sentence s : c.getDescParsed()){
+				System.out.println("Bi-grams " + s.getNgrams(2));
+				System.out.println("Bi-grams_POS" + s.getNgramsPosTags(2));
+				System.out.println("Nouns: " + s.getNouns());
+				System.out.println("Module Entity:" + s.getModuleEntity(2));
+			}
+		}
 		
 //		Course c108 = new Course.Builder("ucsd").courseNum("BISP 197").name("Biology Internship Program").desc("Sexual Development. Under the joint supervision of a biology faculty adviser and a selected industry mentor, the student will conduct independent research on a problem in an industrial biotech laboratory. The student will gain insight into industry research and practical biotech experience. Prerequisites: BIBC 103 or BIMM 101, BIBC 102, BICD 100, BIMM 100, overall GPA 3.0, and consent of the biology faculty coordinator.").build();
 //		for(Sentence s : c108.getDescParsed()){
@@ -712,12 +712,12 @@ public class ToyData {
 //			System.out.println("Module Entity: " + s.getModuleEntity(2));
 //		}
 		
-		Course c22 = new Course.Builder("ucsd").courseNum("BIBC 102").name("Metabolic Biochemistry").desc("Energy-producing pathways glycolysis, the TCA cycle, oxidative phosphorylation, photosynthesis, and fatty acid oxidation; and biosynthetic pathways gluconeogenesis, glycogen synthesis, and fatty acid biosynthesis. Nitrogen metabolism, urea cycle, amino acid metabolism, nucleotide metabolism, and metabolism of macromolecules. Prerequisites: Chem 140A and Chem 140B. (Note: Students may not receive credit for both BIBC 102 and Chem 114B.)").build();
-		for(Sentence s : c22.getDescParsed()){
-			System.out.println(s);
-			System.out.println("--------------------------------------------------");
-			System.out.println("Module Entity: " + s.getModuleEntity(2));
-			System.out.println("--------------------------------------------------");
-		}
+//		Course c22 = new Course.Builder("ucsd").courseNum("BIBC 102").name("Metabolic Biochemistry").desc("Energy-producing pathways glycolysis, the TCA cycle, oxidative phosphorylation, photosynthesis, and fatty acid oxidation; and biosynthetic pathways gluconeogenesis, glycogen synthesis, and fatty acid biosynthesis. Nitrogen metabolism, urea cycle, amino acid metabolism, nucleotide metabolism, and metabolism of macromolecules. Prerequisites: Chem 140A and Chem 140B. (Note: Students may not receive credit for both BIBC 102 and Chem 114B.)").build();
+//		for(Sentence s : c22.getDescParsed()){
+//			System.out.println(s);
+//			System.out.println("--------------------------------------------------");
+//			System.out.println("Module Entity: " + s.getModuleEntity(2));
+//			System.out.println("--------------------------------------------------");
+//		}
 	}
 }

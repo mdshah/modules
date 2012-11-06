@@ -10,6 +10,7 @@ import java.util.Set;
 public class Stopwords {
 	public static Set<String> stopwords;
 	public static Set<String> stopwordsModule;
+	public static Set<String> validwords;
 	
 	/**
 	 * Test if s is a stopword
@@ -51,6 +52,29 @@ public class Stopwords {
 			}
 		}
 		return stopwordsModule.contains(s);
+	}
+
+	/**
+	 * checks if String s is a valid english
+	 * @param s
+	 * @return
+	 */
+	public static boolean isValidWord(String s) {
+		if(validwords == null){
+			validwords = new HashSet<String>();
+			try {
+				for(BufferedReader reader2 = new BufferedReader(new FileReader("validwords.txt")); reader2.ready();){
+					validwords.add(reader2.readLine());
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return validwords.contains(s);
 	}
 	
 }
