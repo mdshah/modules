@@ -124,6 +124,7 @@ import java.util.Set;
 			ruleset.add("JJ NNP"); 
 			ruleset.add("JJ NNPS"); 
 			ruleset.add("NN NN");
+			ruleset.add("NN NNS");
 			ruleset.add("NNS IN NN"); //ex) principles of heridity
 			ruleset.add("NNP NN"); //TCA Cycle
 			

@@ -698,9 +698,7 @@ public class ToyData {
 			System.out.println(c);
 			System.out.println("[PREREQUISITE]: " + PrereqParser.prereqOf(c.getDesc()));
 			for(Sentence s : c.getDescParsed()){
-				System.out.println("Bi-grams " + s.getNgrams(2));
-				System.out.println("Bi-grams_POS" + s.getNgramsPosTags(2));
-				System.out.println("Nouns: " + s.getNouns());
+				System.out.println("words: " + s.getWords());
 				System.out.println("Module Entity:" + s.getModuleEntity(2));
 			}
 		}

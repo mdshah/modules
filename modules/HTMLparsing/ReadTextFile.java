@@ -141,79 +141,7 @@ public class ReadTextFile
     	    	universityList.add(univ);
     		}
     	}
-    	
-    	//----------------------------Trying to see if there is a description
-//    	for(University u : universityList){
-//    		System.out.println("------------------------------------->" + u.getId());
-//    		Document d = u.getDoc();
-//    		Elements els = d.select("[class~=(?i).*desc.*]");
-//    		for(Element e : els){
-//    			System.out.println("e.text():  "+ e.text());
-//    			System.out.println("e.data():  " + e.data());
-//    			System.out.println("e.tagName(): " + e.tagName());
-//    			System.out.println("e.html(): " + e.html());
-//    			System.out.println("-------");
-//    		}
-//    		System.out.println("--------------------");
-//    	}
- 
-    	//---------------------------Trying to classify HTML-----------------------
-    	List<Map<String,Integer>> featureList = new LinkedList<Map<String,Integer>>();
-    	Set<String> stopTags=new HashSet<String>();
-    	stopTags.add("html");
-    	stopTags.add("#root");
-    	stopTags.add("body");
-    	stopTags.add("head");
-    	
-    	Set<String> used = new HashSet<String>();
-    	for (University u : universityList) {
-    		System.out.println("id:" + u.getId());
-			Document doc = u.getDoc();
-			Elements el = doc.select("*");
-			Map<String,Integer> feature = new HashMap<String,Integer>();
-			for(Element e : el){
-				String tag = e.tagName();
-				if(feature.containsKey(tag)){
-					int count=feature.get(tag);
-					feature.put(tag, ++count);
-				} else {
-					feature.put(tag, 1);
-					used.add(tag);
-				}
-					
-				System.out.println("tagName: " + tag);
-			}
-			featureList.add(feature);
-		}
-    	
-    	//header
-    	Iterator<String> hitr = used.iterator();
-    	while(hitr.hasNext())
-    		System.out.print(hitr.next()+"\t");
-    	System.out.println();
-    	
-    	for(Map<String,Integer> feature : featureList){
-    		Iterator<String> itr = used.iterator();
-    		while(itr.hasNext()){
-    			String tag = itr.next();
-//    			System.out.print(tag+"\t");
-    			if(feature.containsKey(tag)){
-//    				System.out.print(String.format("%02d",feature.get(tag))+" ");
-    				System.out.print(feature.get(tag)+ "\t");
-    			}
-    			else
-    				System.out.print("0\t");
-//    			System.out.println();
-    		}
-    		System.out.println();
-//    		for (Map.Entry<String, Integer> entry : feature.entrySet()) {
-//    			System.out.println("Key: " + entry.getKey() + " --> Val:" + entry.getValue());
-//				
-//			}
-//    		System.exit(-1);
-    	}
-    	
-    	//---------------------------Trying to classify HTML ENDS-----------------------
+       	
     	
     	log("--------------------ALL Documents Successfully Loaded");
     	//--------------------------First Filter: Using a "class" name in html ------------------------
@@ -221,23 +149,26 @@ public class ReadTextFile
     	for(University u : universityList)
     		applyFilter(u, descFilter);
     	
-    	//--------------------------Second Filter: Brute force HTML Parsing ------------------------
     	//for those have zero courses. we will use more brute force approach to get the data
-
-//    	List<University> firstFilterFailed = new LinkedList<University>();
-//    	for(University u : universityList)
-//    		if(u.getCourses().size() == 0)
-//    			firstFilterFailed.add(u);
-//    	    	
-//    	Filter trFitler = new TableLengthFilter();
-//    	for(University u : firstFilterFailed)
-//    		applyFilter(u, trFitler);
-//    	 	
-//    	for(University u : universityList){
-//    		log(u.toString());
-//    	} 
-
+    	List<University> firstFilterFailed = new LinkedList<University>();
+    	for(University u : universityList)
+    		if(u.getCourses().size() == 0)
+    			firstFilterFailed.add(u);
     	
+    	//For now we will only use the university that passes the first filter
+    	List<University> goodUniversityList = new LinkedList<University>();
+    	for(University u : universityList) {
+    		if(!firstFilterFailed.contains(u))
+    			goodUniversityList.add(u); //<----------------------------------------------------------USE THIS ONE
+    	}
+    	
+    	for(University u : goodUniversityList){
+    		System.out.println(u);
+    		for(Course c : u.getCourses()){
+    			System.out.println(c);
+    		}
+    	}
+    
     	University ucsd = new University("0");
     	ToyData td = new ToyData();
     	ucsd.setCourses(td.getCourseList());

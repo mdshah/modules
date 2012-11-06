@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import modules.entities.Course;
+
 public class PrereqParser {
 
 	//returns the list of prerequisite given the course description
@@ -17,6 +19,12 @@ public class PrereqParser {
 		while(m.find())
 			prereqs.add(m.group());
 		return prereqs;
+	}
+	
+	//returns the list of prerequisite given the course description
+	public static List<String> prereqOf(Course c){
+		String s = c.getDesc();
+		return prereqOf(s);
 	}
 	
 	public static void main(String[] args) {
