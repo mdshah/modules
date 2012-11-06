@@ -78,3 +78,6 @@ undergraduates
 upper-division
 week
 year
+lectures
+varies
+examples

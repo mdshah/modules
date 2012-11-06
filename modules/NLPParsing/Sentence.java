@@ -104,7 +104,7 @@ import java.util.Set;
 		 * @return
 		 * @throws Exception 
 		 */
-		public List<String> getModuleEntity(int ngram) throws Exception{
+		public List<String> getModuleEntity() throws Exception{
 			List<String> words = getWords();
 			List<String> bigramWORDList = getNgrams(2);
 			List<String> bigramPOSList = getNgramsPosTags(2);

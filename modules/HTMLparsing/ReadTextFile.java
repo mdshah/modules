@@ -6,6 +6,7 @@ import java.util.*;
 import modules.HTMLparsing.filter.ClassByDescFilter;
 import modules.HTMLparsing.filter.Filter;
 import modules.NLPParsing.DataAnalyzer;
+import modules.NLPParsing.Sentence;
 import modules.entities.Course;
 import modules.entities.University;
 import modules.testData.ToyData;
@@ -103,7 +104,7 @@ public class ReadTextFile
     		university.addCourse(c);
     	}
     }
-    public static void main(String args[]) throws IOException,java.net.SocketTimeoutException
+    public static void main(String args[]) throws Exception
     {
     	File urlFile = new File("g4_Biology_Updated.txt");
     	
@@ -165,20 +166,20 @@ public class ReadTextFile
     	for(University u : goodUniversityList){
     		System.out.println(u);
     		for(Course c : u.getCourses()){
-    			System.out.println(c);
+    			for(Sentence s : c.getDescParsed()){
+    				System.out.println(s.getModuleEntity());
+    			}
     		}
     	}
     
+    	
     	University ucsd = new University("0");
     	ToyData td = new ToyData();
     	ucsd.setCourses(td.getCourseList());
     	List<University> univ = new ArrayList<University>();
     	univ.add(ucsd);
-    	
     	DataAnalyzer courses = new DataAnalyzer(univ);
-
-//    	File outFile = new File("out.txt");
-//    	writeFile(outFile,output.toString());
+    	
     	System.out.println("Done!");
     }
 }
