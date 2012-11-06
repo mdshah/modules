@@ -1,6 +1,8 @@
 package modules.NLPParsing;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 	/**
 	 * For each sentence in course description
@@ -77,7 +79,7 @@ import java.util.List;
 					sb.append(words.get(i+j));
 					sb.append(" ");
 				}
-				ngrams.add(sb.toString());
+				ngrams.add(sb.toString().trim());
 			}
 			return ngrams;
 		}
@@ -90,9 +92,55 @@ import java.util.List;
 					sb.append(posTags.get(i+j));
 					sb.append(" ");
 				}
-				ngramsPosTags.add(sb.toString());
+				ngramsPosTags.add(sb.toString().trim());
 			}
 			return ngramsPosTags;
 		}
-		
+	
+		/**
+		 * returns the list of n-gram string that is recoganized as a module entity
+		 * rule-based
+		 * @param ngram
+		 * @return
+		 * @throws Exception 
+		 */
+		public List<String> getModuleEntity(int ngram) throws Exception{
+			List<String> ngramWORDList = getNgrams(ngram);
+			List<String> ngramPOSList = getNgramsPosTags(ngram);
+			if(ngramWORDList.size() != ngramPOSList.size())
+				throw new Exception("SHOULD BE EQUAL!!");
+			Set<String> ruleset = new HashSet<String>();
+			
+			//define rules
+			//need to get more sophisticated
+			ruleset.add("JJ NN");
+			ruleset.add("JJ NNS"); 
+			ruleset.add("JJ NNP"); 
+			ruleset.add("JJ NNPS"); 
+			ruleset.add("NN NN");
+			ruleset.add("NNS IN NN"); //ex) principles of heridity
+			ruleset.add("NNP NN"); //TCA Cycle
+			
+			List<String> moduleEntityList = new LinkedList<String>();
+			for(int i=0; i<ngramPOSList.size();i++){
+				if(ruleset.contains(ngramPOSList.get(i))){
+					String[] words = ngramWORDList.get(i).split(" ");
+					boolean isStopword = false;
+					for(String s : words){
+						if(Stopwords.isStopwordModule(s)){
+							isStopword = true;
+							break;
+						} 
+					}
+					if(!isStopword)
+						moduleEntityList.add(ngramWORDList.get(i));
+				}
+			}
+			
+			
+			
+			return moduleEntityList;
+			
+			
+		}
 	}
