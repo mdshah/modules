@@ -3,7 +3,12 @@ package modules.entities;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
+import modules.NLPParsing.PrereqParser;
 import modules.NLPParsing.Sentence;
 import modules.NLPParsing.TextParser;
 import opennlp.tools.util.InvalidFormatException;
@@ -90,6 +95,20 @@ public class Course {
 		return descParsed;
 	}
 	
+	public List<String> getModuleEntity() throws Exception{
+		List<Sentence> sList = getDescParsed();
+		Set<String> moduleSet = new HashSet<String>();
+		for(Sentence s : sList){
+			moduleSet.addAll(s.getModuleEntity());
+		}
+		List<String> moduleList = new LinkedList<String>();
+		moduleList.addAll(moduleSet);
+		return moduleList;
+	}
+	
+	public List<String> getPrereq(){
+		return PrereqParser.getPrereqs(this);
+	}
 	public HashMap<String, Double> getWeightVector() {
 		return weightVector;
 	}

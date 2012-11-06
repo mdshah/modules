@@ -696,11 +696,8 @@ public class ToyData {
 		List<Course> sample = td.sample(20);
 		for(Course c : sample){
 			System.out.println(c);
-			System.out.println("[PREREQUISITE]: " + PrereqParser.prereqOf(c.getDesc()));
-			for(Sentence s : c.getDescParsed()){
-				System.out.println("words: " + s.getWords());
-				System.out.println("Module Entity:" + s.getModuleEntity());
-			}
+			System.out.println("[modules]: " + c.getModuleEntity());
+			System.out.println("[prreqs]: " + c.getPrereq());
 		}
 		
 //		Course c108 = new Course.Builder("ucsd").courseNum("BISP 197").name("Biology Internship Program").desc("Sexual Development. Under the joint supervision of a biology faculty adviser and a selected industry mentor, the student will conduct independent research on a problem in an industrial biotech laboratory. The student will gain insight into industry research and practical biotech experience. Prerequisites: BIBC 103 or BIMM 101, BIBC 102, BICD 100, BIMM 100, overall GPA 3.0, and consent of the biology faculty coordinator.").build();
