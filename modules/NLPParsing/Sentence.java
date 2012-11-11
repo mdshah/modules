@@ -182,7 +182,7 @@ import java.util.regex.Pattern;
 					continue;
 				String uniwordPOS = getFirstChar(unigramPOSList.get(i));
 				String uniword = unigramWORDList.get(i);
-				if(ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) && Stopwords.isValidWord(uniword.toLowerCase())){
+				if(ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) && Stopwords.isValidWord(uniword.toLowerCase()) && !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
 						moduleEntityList.add(uniword.toLowerCase());
 				}
 			}

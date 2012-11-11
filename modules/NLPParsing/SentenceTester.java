@@ -7,7 +7,7 @@ import modules.entities.Course;
 
 public class SentenceTester {
 	public static void main(String[] args) throws Exception {
-		Course c = new Course.Builder("junk").desc("This course covers advanced topics in plant biology in the areas of molecular genetic developmental, and physiological biology. We will discuss plant-microbe interactions, transposable elements, protein trafficking, ion transport, and organ development. The format of this section includes lectures and discussion of selected papers").build();
+		Course c = new Course.Builder("junk").desc("Theory and practice of recombinant DNA and molecular biology techniques. Includes construction and screening of DNA libraries, DNA sequencing, PCR and its applications, bioinformatics, and RNA analysis. Prerequisites: BILD 1. Students may not enroll in or receive credit for both BIMM 101 and BIEB 123, or BIMM 101 and Chem 109 (formerly Chem 112B). BIMM 100 recommended.").build();
 		System.out.println(c.getDescParsed().get(0));
 		System.out.println(c.getModuleEntity());
 		System.out.println(firstSubstring("yes wow nice"));

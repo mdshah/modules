@@ -11,6 +11,7 @@ public class Stopwords {
 	public static Set<String> stopwords;
 	public static Set<String> stopwordsModule;
 	public static Set<String> validwords;
+	public static Set<String> meaninglessUnigram;
 	
 	/**
 	 * Test if s is a stopword
@@ -52,6 +53,29 @@ public class Stopwords {
 			}
 		}
 		return stopwordsModule.contains(s);
+	}
+	
+	/**
+	 * check if a given string is a meaningless unigram
+	 * @param s
+	 * @return
+	 */
+	public static boolean isMeaninglessUnigram(String s){
+		if(meaninglessUnigram == null){
+			meaninglessUnigram = new HashSet<String>();
+			try {
+				for(BufferedReader reader2 = new BufferedReader(new FileReader("meaninglessUnigram.txt")); reader2.ready();){
+					meaninglessUnigram.add(reader2.readLine());
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return meaninglessUnigram.contains(s);
 	}
 
 	/**
