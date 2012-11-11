@@ -3,6 +3,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 	/**
 	 * For each sentence in course description
@@ -105,32 +106,55 @@ import java.util.Set;
 		 * @throws Exception 
 		 */
 		public List<String> getModuleEntity() throws Exception{
+			//need to take care of trigram
+			
 			List<String> words = getWords();
-			List<String> bigramWORDList = getNgrams(2);
-			List<String> bigramPOSList = getNgramsPosTags(2);
-			if(bigramWORDList.size() != bigramPOSList.size())
-				throw new Exception("SHOULD BE EQUAL!!");
-			Set<String> ruleset = new HashSet<String>();
+			List<String> moduleEntityList = new LinkedList<String>();
 			
 			//to keep track of one words that are used as an entity
 			boolean[] used = new boolean[words.size()];
+			
 			for(int i=0;i<used.length;i++)
 				used[i] = false;
 				
+			
+			//Trigram filter
+			List<String> trigramWORDList = getNgrams(3);
+			List<String> trigramPOSList = getNgramsPosTags(3);
+			
+			Set<String> ruleset = new HashSet<String>();
+			ruleset.add("N I N");
+			ruleset.add("J N N");
+			for(int i=0; i< trigramPOSList.size();i++){
+//				System.out.println(getFirstChar(trigramPOSList.get(i)));
+				if(ruleset.contains(getFirstChar(trigramPOSList.get(i)))){
+					String[] tmp = trigramWORDList.get(i).split(" ");
+//					System.out.println("-------------------->" + tmp[0].toLowerCase());
+					//liberal. just check the first word to filter out stop module
+					if(!Stopwords.isStopwordModule(tmp[0].toLowerCase())){
+//						System.out.println("added---->" + tmp[0].toLowerCase());
+						moduleEntityList.add(trigramWORDList.get(i).toLowerCase());
+						int offset=i;
+						used[offset]=true;
+						used[offset+1]=true;
+						used[offset+2]=true;
+					}
+				}
+			}
+			
+			//Bigram filter
+			List<String> bigramWORDList = getNgrams(2);
+			List<String> bigramPOSList = getNgramsPosTags(2);
+			
 			//define rules
 			//need to get more sophisticated
-			ruleset.add("JJ NN");
-			ruleset.add("JJ NNS"); 
-			ruleset.add("JJ NNP"); 
-			ruleset.add("JJ NNPS"); 
-			ruleset.add("NN NN");
-			ruleset.add("NN NNS");
-			ruleset.add("NNS IN NN"); //ex) principles of heridity
-			ruleset.add("NNP NN"); //TCA Cycle
-			
-			List<String> moduleEntityList = new LinkedList<String>();
+			ruleset.add("J N");
+			ruleset.add("N N");
 			for(int i=0; i<bigramPOSList.size();i++){
-				if(ruleset.contains(bigramPOSList.get(i))){
+				if(used[i]){
+					continue;
+				}
+				if(ruleset.contains(getFirstChar(bigramPOSList.get(i)))){
 					String[] wordsSplits = bigramWORDList.get(i).split(" ");
 					boolean isStopword = false;
 					for(String s : wordsSplits){
@@ -142,23 +166,21 @@ import java.util.Set;
 					if(!isStopword){
 						moduleEntityList.add(bigramWORDList.get(i).toLowerCase());
 						//bigram
-						used[i]=true;
-						used[i+1]=true;
+						int offset=i;
+						used[offset]=true;
+						used[offset+1]=true;
 					}
 				}
 			}
 			
-			ruleset.add("NN");
-			ruleset.add("NNS"); 
-			ruleset.add("NNP"); 
-			ruleset.add("NNPS"); 
+			ruleset.add("N");
 			List<String> unigramWORDList = getNgrams(1);
 			List<String> unigramPOSList = getNgramsPosTags(1);
 			//unigram
 			for(int i=0;i < used.length;i++){
 				if(used[i])
 					continue;
-				String uniwordPOS = unigramPOSList.get(i);
+				String uniwordPOS = getFirstChar(unigramPOSList.get(i));
 				String uniword = unigramWORDList.get(i);
 				if(ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) && Stopwords.isValidWord(uniword.toLowerCase())){
 						moduleEntityList.add(uniword.toLowerCase());
@@ -168,5 +190,15 @@ import java.util.Set;
 			return moduleEntityList;
 			
 			
+		}
+		
+		private String getFirstChar(String s) {
+			String[] tmp = s.split("\\s+");
+			StringBuilder sb = new StringBuilder();
+			for(String k : tmp){
+				sb.append(k.charAt(0));
+				sb.append(" ");
+			}
+			return sb.toString().trim();
 		}
 	}

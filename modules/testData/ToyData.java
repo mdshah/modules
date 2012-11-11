@@ -692,27 +692,20 @@ public class ToyData {
 		//you can see all the courses
 //		td.print();
 		
-		//Take random sample of 5 courses
-//		List<Course> sample = td.sample(20);
-//		for(Course c : sample){
-//			System.out.println(c);
-//			System.out.println("[modules]: " + c.getModuleEntity());
-//			System.out.println("[prreqs]: " + c.getPrereq());
-//		}
+//		Take random sample of 5 courses
+		List<Course> sample = td.sample(20);
+		for(Course c : sample){
+			System.out.println(c.getDesc());
+			System.out.println(c.getModuleEntity());
+			System.out.println("---------------");
+		}
 		
-//		Course c108 = new Course.Builder("ucsd").courseNum("BISP 197").name("Biology Internship Program").desc("Sexual Development. Under the joint supervision of a biology faculty adviser and a selected industry mentor, the student will conduct independent research on a problem in an industrial biotech laboratory. The student will gain insight into industry research and practical biotech experience. Prerequisites: BIBC 103 or BIMM 101, BIBC 102, BICD 100, BIMM 100, overall GPA 3.0, and consent of the biology faculty coordinator.").build();
-//		for(Sentence s : c108.getDescParsed()){
-//			System.out.println(s);
-//			System.out.println("POS:" + s.getPosTags());
-//			System.out.println("Module Entity: " + s.getModuleEntity(2));
-//		}
+		Course c108 = new Course.Builder("ucsd").courseNum("BISP 197").name("Biology Internship Program").desc("Sexual Development. Under the joint supervision of a biology faculty adviser and a selected industry mentor, the student will conduct independent research on a problem in an industrial biotech laboratory. The student will gain insight into industry research and practical biotech experience. Prerequisites: BIBC 103 or BIMM 101, BIBC 102, BICD 100, BIMM 100, overall GPA 3.0, and consent of the biology faculty coordinator.").build();
+		System.out.println(c108.getModuleEntity());
 		
 		Course c22 = new Course.Builder("ucsd").courseNum("BIBC 102").name("Metabolic Biochemistry").desc("Hello I want to learn TCA cycle, glycolysis, principle of ecology.").build();
-		for(Sentence s : c22.getDescParsed()){
-			System.out.println(s.getWords());
-			System.out.println("--------------------------------------------------");
-			System.out.println("Chunks" + s.getChunks());
-			System.out.println("--------------------------------------------------");
+//		System.out.println(c22.getModuleEntity());
 		}
-	}
+	
+	
 }
