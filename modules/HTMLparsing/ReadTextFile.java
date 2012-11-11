@@ -166,13 +166,11 @@ public class ReadTextFile
     	for(University u : goodUniversityList){
     		System.out.println(u);
     		for(Course c : u.getCourses()){
-    			for(Sentence s : c.getDescParsed()){
-    				System.out.println(s.getModuleEntity());
-    			}
+    			System.out.println(c.getModuleEntity());
     		}
     	}
     
-    	
+    	System.exit(-1);
     	University ucsd = new University("0");
     	ToyData td = new ToyData();
     	ucsd.setCourses(td.getCourseList());
