@@ -169,15 +169,16 @@ public class ReadTextFile
     			System.out.println(c.getModuleEntity());
     		}
     	}
-    
-    	System.exit(-1);
+
     	University ucsd = new University("0");
     	ToyData td = new ToyData();
     	ucsd.setCourses(td.getCourseList());
     	List<University> univ = new ArrayList<University>();
     	univ.add(ucsd);
     	DataAnalyzer courses = new DataAnalyzer(univ);
-    	
+    	    	
+    	System.exit(-1);
+
     	System.out.println("Done!");
     }
 }
