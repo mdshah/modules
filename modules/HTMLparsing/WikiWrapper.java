@@ -150,4 +150,15 @@ public class WikiWrapper
         }
         return contains;
     }
+    public boolean AsubB(String moduleA, String moduleB) 
+    {
+        ArrayList<String> words = new ArrayList();
+        HashMap<String,Integer> containedWords;
+        words.add(moduleA);
+        containedWords = containWordsGivenPage(words, moduleB);
+        if(containedWords == null || containedWords.isEmpty())
+            return false;
+        else
+            return true;
+    }
 }
