@@ -143,9 +143,9 @@ public class Course {
 				"[School]" + school + "\n" +
 			   "[Name]" + name + "\n" +
 			   "[CourseNum]" + courseNum + "\n" +
-			   "[Desc]" + desc + "\n" +
-			   "[Parsed]" + descParsed;
-	}
+			   "[Desc]" + desc;
+			
+	} 
 	
 	
 
