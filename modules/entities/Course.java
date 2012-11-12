@@ -44,6 +44,7 @@ public class Course {
 		descParsed = builder.descParsed;
 		
 	}
+	
 	public static class Builder{
 		private String school;
 		private String name="NA";
@@ -70,9 +71,7 @@ public class Course {
 		}
 		public Course build(){
 			return new Course(this);
-		}
-		
-		
+		}		
 	}
 
 	public String getName() {
@@ -101,8 +100,15 @@ public class Course {
 		for(Sentence s : sList){
 			moduleSet.addAll(s.getModuleEntity());
 		}
-		List<String> moduleList = new LinkedList<String>();
+		List<String> moduleList = new ArrayList<String>();
 		moduleList.addAll(moduleSet);
+		int max = (moduleList.size() > 5) ? 5 : moduleList.size();
+
+		System.out.print("course" + courseNum);
+		for(int i = 0; i < max; i++) {
+			System.out.print(" " + moduleList.get(i) + ",");
+		}
+		System.out.println();
 		return moduleList;
 	}
 	

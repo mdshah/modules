@@ -30,6 +30,7 @@ public class DataAnalyzer {
 		//computeCosineSimilarity();
 		//createDotFile(createModuleStructure());
 		//generateMap("modules");
+		int i = 0; 
 		createModules(false);
 	}
 
@@ -164,15 +165,15 @@ public class DataAnalyzer {
 			for(University univ : universities) {
 				int count = 0; 
 				for(Course c : univ.getCourses()) { 
-					if(count > 1) continue;
+					//if(count > 1) continue;
 					allCourses.put(c.getCourseNum(), c);
 					List<String> modules = c.getModuleEntity();
 					List<String> invalidModules = new ArrayList<String>();
 					//handle prereqs part 
-					if(c.getPrereq().size() > 0) {
+					if(c.getPrereq().size() > 0 && modules.size() > 0) {
 						for(String prereq : c.getPrereq()) {
 							Course preq = allCourses.get(prereq);
-							if(null != preq) {
+							if(null != preq && !prereq.equals(c.getCourseNum())) {
 								List<String> prereqMod = preq.getModuleEntity();
 								if(allPairs) {
 									for (String parent : prereqMod) {									
@@ -193,7 +194,7 @@ public class DataAnalyzer {
 								else {  //connect the last module from prereq to the first module from this course 
 									String parent = prereqMod.get(prereqMod.size() - 1);
 									String child = modules.get(0);
-									int i = 1; 
+									int i = 0; 
 
 									for(String ch : modules) {
 										if(prereqMod.contains(ch) || invalidModules.contains(ch)) {
@@ -201,9 +202,12 @@ public class DataAnalyzer {
 										}
 									}
 
-									while(prereqMod.contains(child) || invalidModules.contains(child) || i == (modules.size() - 1)) {
-										child = modules.get(i);
+									while((null != child) && (prereqMod.contains(child) || invalidModules.contains(child))) {
 										i++;
+										if(i < modules.size() - 1)
+											child = modules.get(i);
+										else break;
+										
 									}
 
 									Module p = (allModules.get(parent) != null) ? allModules.get(parent) : new Module(parent);
@@ -225,12 +229,14 @@ public class DataAnalyzer {
 						if(i != (modules.size() - 1)) {
 							child = modules.get(i+1);
 						}
-						
+
 						int j = i; 
-						
-						while(i == (modules.size() - 2) || (null != child) && (invalidModules.contains(child) || child.equals(parent))) {
-							child = modules.get(i+1);
+
+						while((null != child) && (invalidModules.contains(child) || child.equals(parent))) {							
 							i++;
+							if(i < (modules.size() - 1))
+								child = modules.get(i);
+							else break;	
 						}
 
 						i = j;
@@ -276,7 +282,7 @@ public class DataAnalyzer {
 		String mod = "";
 
 		for(int i = 0; i < array.length; i++){
-			mod += array[i];
+			mod += array[i].replaceAll("[^\\p{L}]", "_");
 			if(i != (array.length - 1)) mod += "_";
 		}
 		return mod;
