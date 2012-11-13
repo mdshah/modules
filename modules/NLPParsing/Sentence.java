@@ -130,7 +130,7 @@ import java.util.regex.Pattern;
 					String[] tmp = trigramWORDList.get(i).split(" ");
 //					System.out.println("-------------------->" + tmp[0].toLowerCase());
 					//liberal. just check the first word to filter out stop module
-					if(!Stopwords.isStopwordModule(tmp[0].toLowerCase())){
+					if(!Stopwords.isStopwordModule(tmp[0].toLowerCase()) && !Stopwords.containsNumber(trigramWORDList.get(i))){
 //						System.out.println("added---->" + tmp[0].toLowerCase());
 						moduleEntityList.add(trigramWORDList.get(i).toLowerCase());
 						int offset=i;
@@ -158,11 +158,12 @@ import java.util.regex.Pattern;
 					boolean isStopword = false;
 					for(String s : wordsSplits){
 						if(Stopwords.isStopwordModule(s)){
+//							System.out.println("DEBUG: " + bigramWORDList.get(i)+ ":"+ s);
 							isStopword = true;
 							break;
 						} 
 					}
-					if(!isStopword){
+					if(!isStopword && !Stopwords.containsNumber(bigramWORDList.get(i))){
 						moduleEntityList.add(bigramWORDList.get(i).toLowerCase());
 						//bigram
 						int offset=i;
@@ -182,7 +183,7 @@ import java.util.regex.Pattern;
 				String uniwordPOS = getFirstChar(unigramPOSList.get(i));
 				String uniword = unigramWORDList.get(i);
 				//Stopwords.isValidWord(uniword.toLowerCase()) &&
-				if(ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) &&  !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
+				if(!Stopwords.containsNumber(uniword.toLowerCase()) && ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) &&  !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
 						moduleEntityList.add(uniword.toLowerCase());
 				}
 			} 

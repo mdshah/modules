@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class Stopwords {
 	public static Set<String> stopwords;
@@ -99,6 +100,21 @@ public class Stopwords {
 			}
 		}
 		return validwords.contains(s);
+	}
+	
+	/**
+	 * check if String s contains a number
+	 * @param s
+	 * @return
+	 */
+	public static boolean containsNumber(String s) {
+		Pattern p = Pattern.compile("\\d");
+		return p.matcher(s).find();
+	}
+	
+	public static void main(String[] args) {
+		String s = "sfsfsf3";
+		System.out.println(containsNumber(s));
 	}
 	
 }
