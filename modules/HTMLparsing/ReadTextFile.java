@@ -10,6 +10,7 @@ import modules.NLPParsing.Sentence;
 import modules.entities.Course;
 import modules.entities.University;
 import modules.testData.ToyData;
+import modules.testData.ToyData_math;
 import opennlp.tools.util.InvalidFormatException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -106,12 +107,10 @@ public class ReadTextFile
     }
     public static void main(String args[]) throws Exception
     {
+    	//Step1: URL List
     	File urlFile = new File("g4_Biology_Updated.txt");
-    	
-    	// obtain the array of urls
-    	String[] urlArr = getContentsArr(urlFile);    	
-    	StringBuilder output = new StringBuilder();
-    	
+    	String[] urlArr = getContentsArr(urlFile); // obtain the array of urls    	
+    
     	log("---------------------------Loading HTML Docs-----------------------");
     	//Loading up HTML Files
     	File htmlDir = new File("html");
@@ -122,14 +121,11 @@ public class ReadTextFile
     			htmlDir.mkdir();
     		for (int i=0; i < urlArr.length; i++){
     			Document doc = Jsoup.connect(urlArr[i]).get();
-
     			String dirName = "html";
     			String fileName = "Univ" + i + ".html";
     			String path = dirName + "//" + fileName;
     			File aFile = new File(path);
     			writeFile(aFile, doc.toString());
-    			
-    			
     	    	University univ = new University(fileName, doc);
     	    	universityList.add(univ);
         	}
@@ -171,7 +167,7 @@ public class ReadTextFile
     	}
 
     	University ucsd = new University("0");
-    	ToyData td = new ToyData();
+    	ToyData_math td = new ToyData_math();
     	ucsd.setCourses(td.getCourseList());
     	List<University> univ = new ArrayList<University>();
     	univ.add(ucsd);

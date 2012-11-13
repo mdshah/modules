@@ -65,19 +65,19 @@ import java.util.regex.Pattern;
 		
 		public List<String> getNouns() {
 			List<String> nouns = new LinkedList<String>();
-			for (int i = 0; i < words.size(); i++) {
+			for (int i = 0; i < stems.size(); i++) {
 				if(posTags.get(i).startsWith("N"))
-					nouns.add(words.get(i));
+					nouns.add(stems.get(i));
 			}
 			return nouns;
 		}
 		
 		public List<String> getNgrams(int n){
 			List<String> ngrams = new LinkedList<String>();
-			for(int i=0; i < words.size()-n+1; i++){
+			for(int i=0; i < stems.size()-n+1; i++){
 				StringBuilder sb = new StringBuilder();
 				for(int j=0; j < n; j++){
-					sb.append(words.get(i+j));
+					sb.append(stems.get(i+j));
 					sb.append(" ");
 				}
 				ngrams.add(sb.toString().trim());
@@ -108,11 +108,10 @@ import java.util.regex.Pattern;
 		public List<String> getModuleEntity() throws Exception{
 			//need to take care of trigram
 			
-			List<String> words = getWords();
 			List<String> moduleEntityList = new LinkedList<String>();
 			
 			//to keep track of one words that are used as an entity
-			boolean[] used = new boolean[words.size()];
+			boolean[] used = new boolean[stems.size()];
 			
 			for(int i=0;i<used.length;i++)
 				used[i] = false;
@@ -182,7 +181,8 @@ import java.util.regex.Pattern;
 					continue;
 				String uniwordPOS = getFirstChar(unigramPOSList.get(i));
 				String uniword = unigramWORDList.get(i);
-				if(ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) && Stopwords.isValidWord(uniword.toLowerCase()) && !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
+				//Stopwords.isValidWord(uniword.toLowerCase()) &&
+				if(ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) &&  !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
 						moduleEntityList.add(uniword.toLowerCase());
 				}
 			}
