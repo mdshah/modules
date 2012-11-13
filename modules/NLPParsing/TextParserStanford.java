@@ -46,6 +46,7 @@ public class TextParserStanford {
 				posTags.add(token.get(PartOfSpeechAnnotation.class));
 				chunks.add(token.get(ChunkAnnotation.class));
 				ner.add(token.get(NamedEntityTagAnnotation.class));
+//				System.out.println(token.get(NamedEntityTagAnnotation.class));
 				
 			} 
 			Sentence sentenceParsed = new Sentence (tokens, lemma,posTags, chunks, ner);

@@ -290,7 +290,7 @@ public class ToyData_math {
 
 		ToyData_math td = new ToyData_math();
 
-		List<Course> sample = td.sample(5);
+		List<Course> sample = td.sample(50);
 		for(Course c : sample){
 			System.out.println(c.getDesc());
 			System.out.println(c.getModuleEntity());

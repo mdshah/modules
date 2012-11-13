@@ -124,6 +124,7 @@ import java.util.regex.Pattern;
 			List<String> trigramPOSList = getNgramsPosTags(3);
 			
 			Set<String> ruleset = new HashSet<String>();
+			ruleset.add("N P N"); //Taylor's theorem
 			ruleset.add("N I N");
 			ruleset.add("J N N");
 			for(int i=0; i< trigramPOSList.size();i++){
@@ -132,9 +133,14 @@ import java.util.regex.Pattern;
 					String[] tmp = trigramWORDList.get(i).split(" ");
 //					System.out.println("-------------------->" + tmp[0].toLowerCase());
 					//liberal. just check the first word to filter out stop module
-					if(!Stopwords.isStopwordModule(tmp[0].toLowerCase()) && !Stopwords.containsNumber(trigramWORDList.get(i)) && ner.get(i).equals("O")){
+					if(!Stopwords.isStopwordModule(tmp[0].toLowerCase()) && !Stopwords.containsNumber(trigramWORDList.get(i)) && (ner.get(i).equals("O") || ner.get(i).equals("PERSON"))){
 //						System.out.println("added---->" + tmp[0].toLowerCase());
-						moduleEntityList.add(trigramWORDList.get(i).toLowerCase());
+						String candidate=trigramWORDList.get(i).toLowerCase();
+						if(getFirstChar(trigramPOSList.get(i)).equals("N P N") && candidate.contains("'s"))
+							candidate=candidate.replace(" 's","'s");
+						if(getFirstChar(trigramPOSList.get(i)).equals("N P N") && candidate.contains("formulum"))
+							candidate=candidate.replace("formulum", "formula");
+						moduleEntityList.add(candidate);
 						int offset=i;
 						used[offset]=true;
 						used[offset+1]=true;
@@ -165,7 +171,7 @@ import java.util.regex.Pattern;
 							break;
 						} 
 					}
-					if(!isStopword && !Stopwords.containsNumber(bigramWORDList.get(i)) && ner.get(i).equals("O")){
+					if(!isStopword && !Stopwords.containsNumber(bigramWORDList.get(i)) && (ner.get(i).equals("O") || ner.get(i).equals("PERSON"))){
 						moduleEntityList.add(bigramWORDList.get(i).toLowerCase());
 						//bigram
 						int offset=i;

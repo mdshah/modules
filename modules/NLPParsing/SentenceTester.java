@@ -7,7 +7,7 @@ import modules.entities.Course;
 
 public class SentenceTester {
 	public static void main(String[] args) throws Exception {
-		Course c = new Course.Builder("junk").desc("Albert Lee Mr.Lee Harvard Theory and practice of recombinant DNA and molecular biology techniques. Includes construction and screening of DNA libraries, DNA sequencing, PCR and its applications, bioinformatics, and RNA analysis. Prerequisites: BILD 1. Students may not enroll in or receive credit for both BIMM 101 and BIEB 123, or BIMM 101 and Chem 109 (formerly Chem 112B). BIMM 100 recommended.").build();
+		Course c = new Course.Builder("junk").desc("@ 4.0. cr; Prereq-4603 or 5615 or # ; spring, every year. Sequel to MATH 4603. Topology of n-dimensional Euclidian space. Rigorous treatment of multivariable differentiation and integration, including chain rule, Taylor's Theorem, implicit function theorem, Fubini's Theorem, change of variables, Stokes' Theorem. Effective: Spring 2011.").build();
 		System.out.println(c.getDescParsed().get(1));
 		System.out.println(c.getModuleEntity());
 //		System.out.println(firstSubstring("yes wow nice"));
