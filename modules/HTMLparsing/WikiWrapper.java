@@ -20,11 +20,13 @@ public class WikiWrapper
         HashMap<String,Integer> containedWords;
         
         /* example implementation of wiki wrapper */
-        String pageTitle = "computer science";
+        String pageTitle = "taylor expansion";
         System.out.println("Does wikipedia have a \"" + pageTitle +"\" page?: " + wrapper.hasWikiPage(pageTitle));
         words.add("hash table");
         words.add("data structures");
         words.add("algorithms");
+        System.out.println("Wiki title Page: " + wrapper.returnTitlePage(pageTitle));
+        System.exit(0);
         containedWords = wrapper.containWordsGivenPage(words, pageTitle);
         for(int i = 0; i < words.size(); i ++)
         {
@@ -163,4 +165,46 @@ public class WikiWrapper
         else
             return true;
     }
+    public String returnTitlePage(String pageTitle)
+    {
+        if(pageTitle == null)
+            return null;
+        
+        /* ensure that pageTitle exists */
+        if(!hasWikiPage(pageTitle))
+        {
+            System.err.println("Page title does not exist");
+            return null;
+        }
+        String pageTitle_Formatted = pageTitle.replace(' ', '_');
+        try { 
+            URL wikipedia = new URL("http://en.wikipedia.org/wiki/" + pageTitle_Formatted); 
+            BufferedReader in = new BufferedReader(new InputStreamReader(wikipedia.openStream())); 
+            String inputLine; 
+            String delim = "[>-]";
+            while ((inputLine = in.readLine()) != null) {    
+                
+                if(inputLine.contains("<title>"))
+                {
+                    String[] tokens = inputLine.split(delim);
+                    if(tokens.length > 2)
+                    {
+                        //System.out.println(inputLine); 
+                        //System.out.println(tokens[1]);
+                        return tokens[1];
+                    }
+                    else
+                        return null;
+                }
+            } 
+            in.close(); 
+
+        } catch (MalformedURLException me) { 
+            System.out.println(me); 
+
+        } catch (IOException ioe) { 
+            System.out.println(ioe); 
+        }
+        return null;
+    }     
 }
