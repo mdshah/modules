@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 		List<String> stems;
 		List<String> posTags;
 		List<String> chunks;
+		List<String> ner;
 		//Parse parseTree;
 		
 		/**
@@ -28,11 +29,12 @@ import java.util.regex.Pattern;
 		 * @param stems: word sequence after stemming
 		 * @param posTags: POS tag sequence
 		 */
-		public Sentence (List<String> words, List<String> stems, List<String> posTags, List<String> chunks) {
+		public Sentence (List<String> words, List<String> stems, List<String> posTags, List<String> chunks, List<String> ner) {
 			this.words = words;
 			this.stems = stems;
 			this.posTags = posTags;
 			this.chunks = chunks;
+			this.ner = ner;
 		}
 		
 		@Override
@@ -130,7 +132,7 @@ import java.util.regex.Pattern;
 					String[] tmp = trigramWORDList.get(i).split(" ");
 //					System.out.println("-------------------->" + tmp[0].toLowerCase());
 					//liberal. just check the first word to filter out stop module
-					if(!Stopwords.isStopwordModule(tmp[0].toLowerCase()) && !Stopwords.containsNumber(trigramWORDList.get(i))){
+					if(!Stopwords.isStopwordModule(tmp[0].toLowerCase()) && !Stopwords.containsNumber(trigramWORDList.get(i)) && ner.get(i).equals("O")){
 //						System.out.println("added---->" + tmp[0].toLowerCase());
 						moduleEntityList.add(trigramWORDList.get(i).toLowerCase());
 						int offset=i;
@@ -163,7 +165,7 @@ import java.util.regex.Pattern;
 							break;
 						} 
 					}
-					if(!isStopword && !Stopwords.containsNumber(bigramWORDList.get(i))){
+					if(!isStopword && !Stopwords.containsNumber(bigramWORDList.get(i)) && ner.get(i).equals("O")){
 						moduleEntityList.add(bigramWORDList.get(i).toLowerCase());
 						//bigram
 						int offset=i;
@@ -183,7 +185,7 @@ import java.util.regex.Pattern;
 				String uniwordPOS = getFirstChar(unigramPOSList.get(i));
 				String uniword = unigramWORDList.get(i);
 				//Stopwords.isValidWord(uniword.toLowerCase()) &&
-				if(!Stopwords.containsNumber(uniword.toLowerCase()) && ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) &&  !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
+				if( ner.get(i).equals("O") && !Stopwords.containsNumber(uniword.toLowerCase()) && ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) &&  !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
 						moduleEntityList.add(uniword.toLowerCase());
 				}
 			} 
