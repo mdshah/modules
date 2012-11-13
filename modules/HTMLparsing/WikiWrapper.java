@@ -192,7 +192,7 @@ public class WikiWrapper
                     {
                         //System.out.println(inputLine); 
                         //System.out.println(tokens[1]);
-                        return tokens[1];
+                        return tokens[1].toLowerCase();
                     }
                     else
                         return null;
