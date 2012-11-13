@@ -11,6 +11,7 @@ import java.util.Set;
 import modules.NLPParsing.PrereqParser;
 import modules.NLPParsing.Sentence;
 import modules.NLPParsing.TextParser;
+import modules.NLPParsing.TextParserStanford;
 import opennlp.tools.util.InvalidFormatException;
 
 /**
@@ -66,7 +67,7 @@ public class Course {
 		}
 		public Builder desc(String desc) throws InvalidFormatException, IOException{
 			this.desc = desc;
-			descParsed = TextParser.parseDesc(desc);
+			descParsed = TextParserStanford.parseDesc(desc);
 			return this;
 		}
 		public Course build(){
