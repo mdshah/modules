@@ -81,6 +81,8 @@ public class WikiWrapper
                     //System.out.println(i + ": "+ tokens[i] + "");
                     String[] token2 = tokens[i].split(delim2);
                     //System.out.println("|"+token2[1].toLowerCase()+"|");
+                    if(token2.length < 2)
+                        continue;
                     wikiHits.put(token2[1].toLowerCase(), 1);
                 }
                 // print line from URL
