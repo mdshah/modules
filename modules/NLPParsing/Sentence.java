@@ -185,7 +185,7 @@ import java.util.regex.Pattern;
 				if(ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) && Stopwords.isValidWord(uniword.toLowerCase()) && !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
 						moduleEntityList.add(uniword.toLowerCase());
 				}
-			}
+			} 
 			
 			return moduleEntityList;
 			

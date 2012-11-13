@@ -105,7 +105,7 @@ public class Course {
 		int max = (moduleList.size() > 5) ? 5 : moduleList.size();
 
 		System.out.print("course" + courseNum);
-		for(int i = 0; i < max; i++) {
+		for(int i = 0; i < moduleList.size(); i++) {
 			System.out.print(" " + moduleList.get(i) + ",");
 		}
 		System.out.println();

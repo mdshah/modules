@@ -10,6 +10,7 @@ import modules.NLPParsing.Sentence;
 import modules.entities.Course;
 import modules.entities.University;
 import modules.testData.ToyData;
+import modules.testData.ToyData_math;
 import opennlp.tools.util.InvalidFormatException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -146,7 +147,7 @@ public class ReadTextFile
     	
     	log("--------------------ALL Documents Successfully Loaded");
     	//--------------------------First Filter: Using a "class" name in html ------------------------
-    	Filter descFilter = new ClassByDescFilter();
+  /*  	Filter descFilter = new ClassByDescFilter();
     	for(University u : universityList)
     		applyFilter(u, descFilter);
     	
@@ -168,11 +169,11 @@ public class ReadTextFile
     		for(Course c : u.getCourses()){
     			System.out.println(c.getModuleEntity());
     		}
-    	}
+    	} */
 
     	University ucsd = new University("0");
-    	ToyData td = new ToyData();
-    	ucsd.setCourses(td.getCourseList());
+    	ToyData_math td = new ToyData_math();
+    	ucsd.setCourses(td.getSingleCourse());
     	List<University> univ = new ArrayList<University>();
     	univ.add(ucsd);
     	DataAnalyzer courses = new DataAnalyzer(univ);
