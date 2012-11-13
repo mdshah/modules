@@ -24,15 +24,14 @@ public class WikiWrapper
         System.out.println("Does wikipedia have a \"" + pageTitle +"\" page?: " + wrapper.hasWikiPage(pageTitle));
         words.add("hash table");
         words.add("data structures");
-        words.add("algorithms");
-        System.out.println("Wiki title Page: " + wrapper.returnTitlePage(pageTitle));
-        System.exit(0);
+        words.add("algorithms");     
+
         containedWords = wrapper.containWordsGivenPage(words, pageTitle);
         for(int i = 0; i < words.size(); i ++)
         {
             System.out.println("Does the " + pageTitle + " wikipedia page contain: \"" + words.get(i) + "\"?  :" + containedWords.containsKey(words.get(i)));
         }
-        
+        System.out.println("Wiki title Page: " + wrapper.returnTitlePage(pageTitle));
         
         /* example 2 */
         System.out.println("");
@@ -50,12 +49,14 @@ public class WikiWrapper
         {
             System.out.println("Does the " + pageTitle + " wikipedia page contain: \"" + words.get(i) + "\"?  :" + containedWords.containsKey(words.get(i)));
         }
+        System.out.println("Wiki title Page: " + wrapper.returnTitlePage(pageTitle));
         
         /* example 3 */
         System.out.println("");
         pageTitle = "bike wars";
         System.out.println("Does wikipedia have a \"" + pageTitle +"\" page?: " + wrapper.hasWikiPage(pageTitle));
-    }
+        System.out.println("Wiki title Page: " + wrapper.returnTitlePage(pageTitle));
+    }   
     public WikiWrapper()
     {
        
