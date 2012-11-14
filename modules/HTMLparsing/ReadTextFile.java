@@ -168,7 +168,7 @@ public class ReadTextFile
 
     	University ucsd = new University("0");
     	ToyData_math td = new ToyData_math();
-    	ucsd.setCourses(td.getSingleCourse());
+    	ucsd.setCourses(td.getCourseList());
     	List<University> univ = new ArrayList<University>();
     	univ.add(ucsd);
     	DataAnalyzer courses = new DataAnalyzer(univ);
