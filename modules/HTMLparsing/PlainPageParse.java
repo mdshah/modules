@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import modules.HTMLparsing.filter.ClassByDescFilter;
 import modules.HTMLparsing.filter.Filter;
 import modules.HTMLparsing.filter.OneLevelDownFilter;
-import modules.HTMLparsing.filter.ParagraphFilter;
 import modules.entities.Course;
 
 import opennlp.tools.util.InvalidFormatException;

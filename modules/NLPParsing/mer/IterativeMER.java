@@ -38,10 +38,12 @@ public class IterativeMER implements ModuleEntityRecognizer {
 				if(!Stopwords.containsPunctuation(trigramWORDList.get(i)) && !Stopwords.isStopwordModule(tmp[0].toLowerCase())&& !Stopwords.isStopwordModule(tmp[1].toLowerCase()) && !Stopwords.isStopwordModule(tmp[2].toLowerCase()) && !Stopwords.containsNumber(trigramWORDList.get(i)) && (s.getNER().get(i).equals("O") || s.getNER().get(i).equals("PERSON"))){
 //					System.out.println("added---->" + tmp[0].toLowerCase());
 					String candidate=trigramWORDList.get(i).toLowerCase();
-					if(Etc.getFirstChar(trigramPOSList.get(i)).equals("N P N") && candidate.contains("'s"))
+					if(candidate.contains(" 's"))
 						candidate=candidate.replace(" 's","'s");
-					if(Etc.getFirstChar(trigramPOSList.get(i)).equals("N P N") && candidate.contains("formulum"))
+					if(candidate.contains("formulum"))
 						candidate=candidate.replace("formulum", "formula");
+					if(candidate.contains("datum"))
+						candidate=candidate.replace("datum", "data");
 					moduleEntityList.add(candidate);
 					int offset=i;
 					used[offset]=true;
@@ -74,7 +76,12 @@ public class IterativeMER implements ModuleEntityRecognizer {
 					} 
 				}
 				if(!Stopwords.containsPunctuation(bigramWORDList.get(i)) && !isStopword && !Stopwords.containsNumber(bigramWORDList.get(i)) && (s.getNER().get(i).equals("O") || s.getNER().get(i).equals("PERSON"))){
-					moduleEntityList.add(bigramWORDList.get(i).toLowerCase());
+					String candidate=bigramWORDList.get(i).toLowerCase();
+					if(candidate.contains("formulum"))
+						candidate=candidate.replace("formulum", "formula");
+					if(candidate.contains("datum"))
+						candidate=candidate.replace("datum", "data");
+					moduleEntityList.add(candidate);
 					//bigram
 					int offset=i;
 					used[offset]=true;

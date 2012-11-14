@@ -17,7 +17,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class URLGrabberFilter {
+public class URLGrabber {
 	public static void main(String[] args) throws IOException {
 		String url="http://www.math.ucla.edu/ugrad/courses/";
 		

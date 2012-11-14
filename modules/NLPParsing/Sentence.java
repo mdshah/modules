@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 import modules.NLPParsing.mer.IterativeMER;
 import modules.NLPParsing.mer.ModuleEntityRecognizer;
+import modules.NLPParsing.mer.BigramOnlyMER;
+import modules.NLPParsing.mer.TrigramOnlyMER;
 
 	/**
 	 * For each sentence in course description
@@ -122,8 +124,10 @@ import modules.NLPParsing.mer.ModuleEntityRecognizer;
 		 */
 		public List<String> getModuleEntity() throws Exception{
 			//need to take care of trigram
-			
 			ModuleEntityRecognizer mer = new IterativeMER();
+//			ModuleEntityRecognizer mer = new BigramOnlyMER();
+//			ModuleEntityRecognizer mer = new TrigramOnlyMER();
+			
 			return mer.inferModuleFromSentence(this);
 			
 			
