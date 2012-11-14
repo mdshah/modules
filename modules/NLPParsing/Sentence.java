@@ -19,11 +19,12 @@ import modules.NLPParsing.mer.ModuleEntityRecognizer;
 	 *
 	 */
 	public class Sentence {
-		List<String> words;
-		List<String> stems;
-		List<String> posTags;
-		List<String> chunks;
-		List<String> ner;
+		final List<String> words;
+		final List<String> stems;
+		final List<String> posTags;
+		final List<String> chunks;
+		final List<String> ner;
+		final String raw;
 		//Parse parseTree;
 		
 		/**
@@ -32,12 +33,13 @@ import modules.NLPParsing.mer.ModuleEntityRecognizer;
 		 * @param stems: word sequence after stemming
 		 * @param posTags: POS tag sequence
 		 */
-		public Sentence (List<String> words, List<String> stems, List<String> posTags, List<String> chunks, List<String> ner) {
+		public Sentence (List<String> words, List<String> stems, List<String> posTags, List<String> chunks, List<String> ner, String raw) {
 			this.words = words;
 			this.stems = stems;
 			this.posTags = posTags;
 			this.chunks = chunks;
 			this.ner = ner;
+			this.raw = raw;
 		}
 		
 		@Override
@@ -70,6 +72,10 @@ import modules.NLPParsing.mer.ModuleEntityRecognizer;
 		
 		public List<String> getNER(){
 			return ner;
+		}
+		
+		public String getRaw(){
+			return raw;
 		}
 		
 		public List<String> getNouns() {

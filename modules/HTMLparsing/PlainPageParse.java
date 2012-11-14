@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import modules.HTMLparsing.filter.ClassByDescFilter;
 import modules.HTMLparsing.filter.Filter;
+import modules.HTMLparsing.filter.OneLevelDownFilter;
 import modules.HTMLparsing.filter.ParagraphFilter;
 import modules.entities.Course;
 
@@ -20,7 +21,8 @@ public class PlainPageParse {
 		String url ="http://www.ucsd.edu/catalog/courses/MATH.html";
 		String url2 ="http://www.ucsd.edu/catalog/courses/MATH.html";
 		String url3 ="http://www.statistics.northwestern.edu/undergraduate/full-course-list.html";
-		List<Course> courseList = parseCoursesFromUrl(url3,new ParagraphFilter());
+		String url4 ="http://www.math.ucla.edu/ugrad/courses/index.shtml";
+		List<Course> courseList = parseCoursesFromUrl(url4,new OneLevelDownFilter());
 		for(Course c : courseList){
 			System.out.println(c.getModuleEntity());
 		}
@@ -34,7 +36,7 @@ public class PlainPageParse {
 		Course c = new Course.Builder(inferSchoolName(url)).desc(desc).build();
 		return c;
 	}
-	
+
 	public static List<Course> parseCoursesFromUrl(String url) throws InvalidFormatException, IOException{
 		Document doc = Jsoup.connect(url).get();
 		Filter ft = new ClassByDescFilter();

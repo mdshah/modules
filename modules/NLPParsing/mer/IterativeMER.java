@@ -35,7 +35,7 @@ public class IterativeMER implements ModuleEntityRecognizer {
 				String[] tmp = trigramWORDList.get(i).split(" ");
 //				System.out.println("-------------------->" + tmp[0].toLowerCase());
 				//liberal. just check the first word to filter out stop module
-				if(!Stopwords.isStopwordModule(tmp[0].toLowerCase()) && !Stopwords.containsNumber(trigramWORDList.get(i)) && (s.getNER().get(i).equals("O") || s.getNER().get(i).equals("PERSON"))){
+				if(!Stopwords.containsPunctuation(trigramWORDList.get(i)) && !Stopwords.isStopwordModule(tmp[0].toLowerCase())&& !Stopwords.isStopwordModule(tmp[1].toLowerCase()) && !Stopwords.isStopwordModule(tmp[2].toLowerCase()) && !Stopwords.containsNumber(trigramWORDList.get(i)) && (s.getNER().get(i).equals("O") || s.getNER().get(i).equals("PERSON"))){
 //					System.out.println("added---->" + tmp[0].toLowerCase());
 					String candidate=trigramWORDList.get(i).toLowerCase();
 					if(Etc.getFirstChar(trigramPOSList.get(i)).equals("N P N") && candidate.contains("'s"))
@@ -73,7 +73,7 @@ public class IterativeMER implements ModuleEntityRecognizer {
 						break;
 					} 
 				}
-				if(!isStopword && !Stopwords.containsNumber(bigramWORDList.get(i)) && (s.getNER().get(i).equals("O") || s.getNER().get(i).equals("PERSON"))){
+				if(!Stopwords.containsPunctuation(bigramWORDList.get(i)) && !isStopword && !Stopwords.containsNumber(bigramWORDList.get(i)) && (s.getNER().get(i).equals("O") || s.getNER().get(i).equals("PERSON"))){
 					moduleEntityList.add(bigramWORDList.get(i).toLowerCase());
 					//bigram
 					int offset=i;
@@ -93,7 +93,7 @@ public class IterativeMER implements ModuleEntityRecognizer {
 			String uniwordPOS = Etc.getFirstChar(unigramPOSList.get(i));
 			String uniword = unigramWORDList.get(i);
 			//Stopwords.isValidWord(uniword.toLowerCase()) &&
-			if( s.getNER().get(i).equals("O") && !Stopwords.containsNumber(uniword.toLowerCase()) && ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) &&  !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
+			if(!Stopwords.containsPunctuation(uniword.toLowerCase()) && s.getNER().get(i).equals("O") && !Stopwords.containsNumber(uniword.toLowerCase()) && ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) &&  !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
 					moduleEntityList.add(uniword.toLowerCase());
 			}
 		} 

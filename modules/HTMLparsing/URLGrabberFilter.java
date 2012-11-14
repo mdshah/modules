@@ -111,8 +111,5 @@ public class URLGrabberFilter {
 		return docList;
 	}
 	
-	public static Course generateCourseUsingPtag(String url){
-		
-		return new Course.Builder("NA").build();
-	}
+
 }

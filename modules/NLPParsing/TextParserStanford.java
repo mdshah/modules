@@ -39,7 +39,7 @@ public class TextParserStanford {
 		List<String> chunks = new LinkedList<String>();
 		List<String> ner = new LinkedList<String>();
 		List<Sentence> sentenceList = new LinkedList();
-		for(CoreMap sentence: document.get(SentencesAnnotation.class)) {    
+		for(CoreMap sentence: document.get(SentencesAnnotation.class)) { 
 			for(CoreLabel token: sentence.get(TokensAnnotation.class)) {            
 				tokens.add(token.get(TextAnnotation.class));
 				lemma.add(token.get(LemmaAnnotation.class));
@@ -49,7 +49,7 @@ public class TextParserStanford {
 //				System.out.println(token.get(NamedEntityTagAnnotation.class));
 				
 			} 
-			Sentence sentenceParsed = new Sentence (tokens, lemma,posTags, chunks, ner);
+			Sentence sentenceParsed = new Sentence (tokens, lemma,posTags, chunks, ner, sentence.toString());
 			sentenceList.add(sentenceParsed);
 		}
 

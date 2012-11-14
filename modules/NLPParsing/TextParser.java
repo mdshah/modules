@@ -60,7 +60,7 @@ public class TextParser {
 				ner.add("O"); //assume everything is an object
 			}
 			
-			Sentence sentence = new Sentence (Arrays.asList(tokens), lemma, Arrays.asList(posTags), Arrays.asList(chunks), ner);
+			Sentence sentence = new Sentence (Arrays.asList(tokens), lemma, Arrays.asList(posTags), Arrays.asList(chunks), ner, s);
 			sentenceList.add(sentence);
 		}
 		

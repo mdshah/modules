@@ -15,10 +15,11 @@ public class OneLevelDownFilter implements Filter {
 	public List<Course> apply(Document d) throws InvalidFormatException,
 			IOException {
 		List<Course> courseList = new LinkedList<Course>();
-		List<String> validURLs = URLGrabberFilter.getListOfValidURLs(d);
-		for(String url : validURLs){
-			
+		List<String> validURLS = URLGrabberFilter.getListOfValidURLs(d);
+		for(String url : validURLS){
+			courseList.add(CourseFactory.generateCourseUsingPtag(url));
 		}
+		
 		return courseList;
 	}
 }

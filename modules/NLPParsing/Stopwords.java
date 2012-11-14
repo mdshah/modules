@@ -112,9 +112,14 @@ public class Stopwords {
 		return p.matcher(s).find();
 	}
 	
+	public static boolean containsPunctuation(String str){
+		Pattern pattern = Pattern.compile("[!@#$%^&*\\(\\)]");
+		return pattern.matcher(str).find();
+	}
+	
 	public static void main(String[] args) {
-		String s = "sfsfsf3";
-		System.out.println(containsNumber(s));
+		String s = "sfsfs f3";
+		System.out.println(containsPunctuation(s));
 	}
 	
 }
