@@ -2,9 +2,11 @@ package modules.NLPParsing;
 import java.io.*;
 import java.util.*;
 
+import modules.HTMLparsing.WikiWrapper_old;
 import modules.entities.Course;
 import modules.entities.Module;
 import modules.entities.University;
+import modules.graphPruning.PruneGraph;
 
 
 public class DataAnalyzer {
@@ -16,6 +18,7 @@ public class DataAnalyzer {
 	private HashSet<String> stopwords;
 	private HashMap<Course, List<Course>> similarCourses;
 	private int n; 
+	private WikiWrapper_old wiki;
 
 	public DataAnalyzer(List<University> universities) {
 		this.universities = universities;
@@ -23,6 +26,7 @@ public class DataAnalyzer {
 		this.freq_doc = new HashMap<String, Integer>();
 		this.stopwords = new HashSet<String>();
 		this.similarCourses = new HashMap<Course, List<Course>>();
+		this.wiki = new WikiWrapper_old();
 		//createStopWordslist();
 		//calculateN();
 		//computeTF_IDF();
@@ -30,8 +34,8 @@ public class DataAnalyzer {
 		//computeCosineSimilarity();
 		//createDotFile(createModuleStructure());
 		//generateMap("modules");
-		int i = 0; 
-		createModules(false);
+		//	createModules(false);
+		createModulesWithoutPrereq();	
 	}
 
 	/**
@@ -157,24 +161,28 @@ public class DataAnalyzer {
 		return result;
 	}
 
+	//with prereq course 
 	public void createModules(boolean allPairs) {
 		HashMap<String, Course> allCourses = new HashMap<String, Course>();
 		HashMap<String, Module> allModules = new HashMap<String, Module>();
 		//HashSet<Module> allParentModules = new HashSet<Module>();
 		try {
 			for(University univ : universities) {
-				int count = 0; 
 				for(Course c : univ.getCourses()) { 
 					//if(count > 1) continue;
 					allCourses.put(c.getCourseNum(), c);
 					List<String> modules = c.getModuleEntity();
 					List<String> invalidModules = new ArrayList<String>();
+
+					modules = pruneModuleList(modules);
+
 					//handle prereqs part 
 					if(c.getPrereq().size() > 0 && modules.size() > 0) {
 						for(String prereq : c.getPrereq()) {
 							Course preq = allCourses.get(prereq);
 							if(null != preq && !prereq.equals(c.getCourseNum())) {
-								List<String> prereqMod = preq.getModuleEntity();
+								List<String> prereqMod = pruneModuleList(preq.getModuleEntity());
+								//List<String> prereqMod = preq.getModuleEntity();	
 								if(allPairs) {
 									for (String parent : prereqMod) {									
 										Module p = (allModules.get(parent) != null) ? allModules.get(parent) : new Module(parent);
@@ -207,7 +215,7 @@ public class DataAnalyzer {
 										if(i < modules.size() - 1)
 											child = modules.get(i);
 										else break;
-										
+
 									}
 
 									Module p = (allModules.get(parent) != null) ? allModules.get(parent) : new Module(parent);
@@ -248,7 +256,6 @@ public class DataAnalyzer {
 
 						allModules.put(parent, p);
 					}
-					count++; 
 				}
 			}
 
@@ -256,6 +263,76 @@ public class DataAnalyzer {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private List<String> pruneModuleList(List<String> modules) {
+		List<String> prunedList = new ArrayList<String>();
+		for(String s : modules) {
+			s = s.replace("-", " ");
+			String[] orWords = s.split("/");
+			if(orWords.length > 1) {
+				for(String orW : orWords)
+					if(wiki.hasWikiPage(orW)) {
+						orW = wiki.returnTitlePage(orW);
+						prunedList.add(orW);
+						System.out.print(orW + ", ");
+					}
+			}
+			else if(wiki.hasWikiPage(s)) {
+				s = wiki.returnTitlePage(s);
+				prunedList.add(s);
+				System.out.print(s + ", ");
+			}
+		}
+
+		System.out.println();
+		return prunedList;	
+	}
+
+	public void createModulesWithoutPrereq() {
+		try {
+			HashSet<String> allModules = new HashSet<String>();
+			for(University univ : universities) {
+				for(Course c : univ.getCourses()) { 
+					List<String> modules = c.getModuleEntity();
+					modules = pruneModuleList(modules);
+					allModules.addAll(modules);
+				}
+			}
+
+			BufferedWriter out = new BufferedWriter(new FileWriter("modules.txt", false));
+			out.write("digraph {" + "\n");			
+
+			HashSet<String> modules = new HashSet<String>();
+			HashSet<String> allFormatedList = new HashSet<String>();
+			
+			for(String title : allModules) {
+				ArrayList<String> allCandidates = new ArrayList<String>();
+				modules.add(modifyString(title));
+				for(String b : allModules) {
+					if(b != null) allCandidates.add(b);
+				}
+
+				if(title != null && allCandidates.size() > 0) {
+					HashMap<String, Integer> counts = wiki.containWordsGivenPage(allCandidates, title.trim()); 
+					if(counts != null)
+						for(String b : counts.keySet()) {
+							if(!title.equals(b) && counts.get(b) > 0) {
+								out.write(modifyString(title) + " -> " + modifyString(b) + "\n");
+								allFormatedList.add(modifyString(title) + " -> " + modifyString(b));
+							}
+							modules.add(modifyString(b));
+						}
+				}
+			}
+
+			PruneGraph pg = new PruneGraph("modules.txt", modules, allFormatedList);
+			out.write("}");
+			out.close();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -277,13 +354,37 @@ public class DataAnalyzer {
 		return list;
 	}
 
+	public double jaccardianSim(Course A, Course B) {
+		double result = 0.0;
+
+		HashSet<String> intersection = new HashSet<String>();
+		HashSet<String> union = new HashSet<String>();
+
+		try {
+			for(String a : A.getModuleEntity()) {
+				union.add(a);
+				for(String b : B.getModuleEntity()) {
+					if(a.equals(b)) intersection.add(a);
+					union.add(b);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		result = 1.0 * intersection.size() / union.size();
+		return result; 
+	}
+
 	private String modifyString(String s) {
 		String[] array = s.split(" ");
 		String mod = "";
 
-		for(int i = 0; i < array.length; i++){
-			mod += array[i].replaceAll("[^\\p{L}]", "_");
-			if(i != (array.length - 1)) mod += "_";
+		if(null != array) {
+			for(int i = 0; i < array.length; i++){
+				mod += array[i].replaceAll("[^\\p{L}]", "_");
+				if(i != (array.length - 1)) mod += "_";
+			}
 		}
 		return mod;
 	}

@@ -239,8 +239,6 @@ public class ToyData_math {
 		Course c100 =  new Course.Builder("minesota").courseNum("MATH 5615H").name("Honors: Introduction to Analysis I").desc("@ 4.0. cr; Prereq-[[2243 or 2373], [2263 or 2374], [2283 or 3283]] or 2574; fall, every year. Axiomatic treatment of real/complex number systems. Introduction to metric spaces: convergence, connectedness, compactness. Convergence of sequences/series of real/complex numbers, Cauchy criterion, root/ratio tests. Continuity in metric spaces. Rigorous treatment of differentiation of single-variable functions, Taylor's Theorem.").build();
 		courseList.add(c100);
 		Course c101 =  new Course.Builder("minesota").courseNum("MATH 5616H").name("Honors: Introduction to Analysis II").desc("@ 4.0. cr; Prereq-5615; spring, every year. Rigorous treatment of Riemann-Stieltjes integration. Sequences/series of functions, uniform convergence, equicontinuous families, Stone-Weierstrass Theorem, power series. Rigorous treatment of differentiation/integration of multivariable functions, Implicit Function Theorem, Stokes' Theorem.  Additional topics as time permits.").build();
-
-
 	}
 
 	/**
@@ -249,6 +247,10 @@ public class ToyData_math {
 	 */
 	public List<Course> getCourseList(){
 		return courseList;
+	}
+	
+	public List<Course> getSingleCourse() {
+		return courseList.subList(10, 15);
 	}
 
 	/**

@@ -67,7 +67,7 @@ public class Course {
 		}
 		public Builder desc(String desc) throws InvalidFormatException, IOException{
 			this.desc = desc;
-			descParsed = TextParserStanford.parseDesc(desc);
+			descParsed = TextParser.parseDesc(desc);
 			return this;
 		}
 		public Course build(){

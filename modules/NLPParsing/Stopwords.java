@@ -12,7 +12,8 @@ public class Stopwords {
 	public static Set<String> stopwordsModule;
 	public static Set<String> validwords;
 	public static Set<String> meaninglessUnigram;
-	
+	public static boolean first = true;
+
 	/**
 	 * Test if s is a stopword
 	 */
@@ -33,7 +34,7 @@ public class Stopwords {
 		}
 		return stopwords.contains(s);
 	}
-	
+
 	/**
 	 * Test if s is a stopwordModule
 	 */
@@ -44,6 +45,11 @@ public class Stopwords {
 				for(BufferedReader reader2 = new BufferedReader(new FileReader("stopwordsModule.txt")); reader2.ready();){
 					stopwordsModule.add(reader2.readLine());
 				}
+				if(first) {
+					first = false; 
+					isStopword("");
+					isMeaninglessUnigram("");
+				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -52,9 +58,20 @@ public class Stopwords {
 				e.printStackTrace();
 			}
 		}
-		return stopwordsModule.contains(s);
+
+		boolean isStopWordModule = false; 
+		String[] module = s.split(" ");
+		int count = 0; 
+		for(int i = 0; i < module.length; i++) {
+			if(stopwords.contains(module[i]) || meaninglessUnigram.contains(module[i]))
+				count++; 
+		}
+
+		if(count > 1) isStopWordModule = true;
+
+		return stopwordsModule.contains(s) || isStopWordModule;
 	}
-	
+
 	/**
 	 * check if a given string is a meaningless unigram
 	 * @param s
@@ -100,5 +117,5 @@ public class Stopwords {
 		}
 		return validwords.contains(s);
 	}
-	
+
 }
