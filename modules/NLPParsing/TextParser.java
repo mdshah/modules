@@ -53,12 +53,14 @@ public class TextParser {
 			String[] tokens = tokenizer.tokenize(s);
 			String[] posTags = tagger.tag(tokens);
 			String[] chunks = chunker.chunk(tokens, posTags);
+			List<String> ner = new LinkedList();
 			List<String> lemma = new ArrayList();
 			for(String str : tokens) {
 				lemma.add(str.toLowerCase());
+				ner.add("O"); //assume everything is an object
 			}
 			
-			Sentence sentence = new Sentence (Arrays.asList(tokens), lemma, Arrays.asList(posTags), Arrays.asList(chunks));
+			Sentence sentence = new Sentence (Arrays.asList(tokens), lemma, Arrays.asList(posTags), Arrays.asList(chunks), ner, s);
 			sentenceList.add(sentence);
 		}
 		

@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import modules.NLPParsing.mer.IterativeMER;
+import modules.NLPParsing.mer.ModuleEntityRecognizer;
+import modules.NLPParsing.mer.BigramOnlyMER;
+import modules.NLPParsing.mer.TrigramOnlyMER;
+
 	/**
 	 * For each sentence in course description
 	 * getWords()
@@ -16,10 +21,12 @@ import java.util.regex.Pattern;
 	 *
 	 */
 	public class Sentence {
-		List<String> words;
-		List<String> stems;
-		List<String> posTags;
-		List<String> chunks;
+		final List<String> words;
+		final List<String> stems;
+		final List<String> posTags;
+		final List<String> chunks;
+		final List<String> ner;
+		final String raw;
 		//Parse parseTree;
 		
 		/**
@@ -28,11 +35,13 @@ import java.util.regex.Pattern;
 		 * @param stems: word sequence after stemming
 		 * @param posTags: POS tag sequence
 		 */
-		public Sentence (List<String> words, List<String> stems, List<String> posTags, List<String> chunks) {
+		public Sentence (List<String> words, List<String> stems, List<String> posTags, List<String> chunks, List<String> ner, String raw) {
 			this.words = words;
 			this.stems = stems;
 			this.posTags = posTags;
 			this.chunks = chunks;
+			this.ner = ner;
+			this.raw = raw;
 		}
 		
 		@Override
@@ -61,6 +70,14 @@ import java.util.regex.Pattern;
 
 		public List<String> getChunks() {
 			return chunks;
+		}
+		
+		public List<String> getNER(){
+			return ner;
+		}
+		
+		public String getRaw(){
+			return raw;
 		}
 		
 		public List<String> getNouns() {
@@ -107,87 +124,11 @@ import java.util.regex.Pattern;
 		 */
 		public List<String> getModuleEntity() throws Exception{
 			//need to take care of trigram
+			ModuleEntityRecognizer mer = new IterativeMER();
+//			ModuleEntityRecognizer mer = new BigramOnlyMER();
+//			ModuleEntityRecognizer mer = new TrigramOnlyMER();
 			
-			List<String> moduleEntityList = new LinkedList<String>();
-			
-			//to keep track of one words that are used as an entity
-			boolean[] used = new boolean[stems.size()];
-			
-			for(int i=0;i<used.length;i++)
-				used[i] = false;
-				
-			
-			//Trigram filter
-			List<String> trigramWORDList = getNgrams(3);
-			List<String> trigramPOSList = getNgramsPosTags(3);
-			
-			Set<String> ruleset = new HashSet<String>();
-			ruleset.add("N I N");
-			ruleset.add("J N N");
-			for(int i=0; i< trigramPOSList.size();i++){
-//				System.out.println(getFirstChar(trigramPOSList.get(i)));
-				if(ruleset.contains(getFirstChar(trigramPOSList.get(i)))){
-					String[] tmp = trigramWORDList.get(i).split(" ");
-//					System.out.println("-------------------->" + tmp[0].toLowerCase());
-					//liberal. just check the first word to filter out stop module
-					if(!Stopwords.isStopwordModule(tmp[0].toLowerCase())){
-//						System.out.println("added---->" + tmp[0].toLowerCase());
-						moduleEntityList.add(trigramWORDList.get(i).toLowerCase());
-						int offset=i;
-						used[offset]=true;
-						used[offset+1]=true;
-						used[offset+2]=true;
-					}
-				}
-			}
-			
-			//Bigram filter
-			List<String> bigramWORDList = getNgrams(2);
-			List<String> bigramPOSList = getNgramsPosTags(2);
-			
-			//define rules
-			//need to get more sophisticated
-			ruleset.add("J N");
-			ruleset.add("N N");
-			for(int i=0; i<bigramPOSList.size();i++){
-				if(used[i]){
-					continue;
-				}
-				if(ruleset.contains(getFirstChar(bigramPOSList.get(i)))){
-					String[] wordsSplits = bigramWORDList.get(i).split(" ");
-					boolean isStopword = false;
-					for(String s : wordsSplits){
-						if(Stopwords.isStopwordModule(s)){
-							isStopword = true;
-							break;
-						} 
-					}
-					if(!isStopword){
-						moduleEntityList.add(bigramWORDList.get(i).toLowerCase());
-						//bigram
-						int offset=i;
-						used[offset]=true;
-						used[offset+1]=true;
-					}
-				}
-			}
-			
-			ruleset.add("N");
-			List<String> unigramWORDList = getNgrams(1);
-			List<String> unigramPOSList = getNgramsPosTags(1);
-			//unigram
-			for(int i=0;i < used.length;i++){
-				if(used[i])
-					continue;
-				String uniwordPOS = getFirstChar(unigramPOSList.get(i));
-				String uniword = unigramWORDList.get(i);
-				//Stopwords.isValidWord(uniword.toLowerCase()) &&
-				if(ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) &&  !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
-						moduleEntityList.add(uniword.toLowerCase());
-				}
-			} 
-			
-			return moduleEntityList;
+			return mer.inferModuleFromSentence(this);
 			
 			
 		}

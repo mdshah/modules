@@ -108,9 +108,12 @@ public class ReadTextFile
     public static void main(String args[]) throws Exception
     {
     	//Step1: URL List
-    	File urlFile = new File("g4_Biology_Updated.txt");
-    	String[] urlArr = getContentsArr(urlFile); // obtain the array of urls    	
+    	File urlFile_classNameBased = new File("g4_Biology_Updated.txt");
+    	String[] urlArr = getContentsArr(urlFile_classNameBased); // obtain the array of urls    	
     
+//    	File urlFile_LinkedBased = new File("");
+//    	String[] urlArr_linkedBase = getContentsArr(urlFile_LinkedBased);
+    		
     	log("---------------------------Loading HTML Docs-----------------------");
     	//Loading up HTML Files
     	File htmlDir = new File("html");
@@ -142,7 +145,7 @@ public class ReadTextFile
     	
     	log("--------------------ALL Documents Successfully Loaded");
     	//--------------------------First Filter: Using a "class" name in html ------------------------
-  /*  	Filter descFilter = new ClassByDescFilter();
+    	Filter descFilter = new ClassByDescFilter();
     	for(University u : universityList)
     		applyFilter(u, descFilter);
     	
@@ -164,17 +167,18 @@ public class ReadTextFile
     		for(Course c : u.getCourses()){
     			System.out.println(c.getModuleEntity());
     		}
-    	} */
-
+    	} 
+    	
     	University ucsd = new University("0");
     	ToyData_math td = new ToyData_math();
     	ucsd.setCourses(td.getCourseList());
+//    	ucsd.setCourses(td.getSingleCourse());
     	List<University> univ = new ArrayList<University>();
     	univ.add(ucsd);
-    	DataAnalyzer courses = new DataAnalyzer(univ);
-    	    	
-    	System.exit(-1);
+    	DataAnalyzer courses = new DataAnalyzer(univ);	
 
     	System.out.println("Done!");
-    }
+
+    	System.exit(-1);
+    	}
 }

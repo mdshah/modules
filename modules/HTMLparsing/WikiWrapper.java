@@ -117,7 +117,7 @@ public class WikiWrapper
         /* ensure that pageTitle exists */
         if(!hasWikiPage(pageTitle))
         {
-            System.err.println("Page title does not exist");
+            System.err.println("Page title "+ pageTitle + " does not exist");
             return null;
         }
         

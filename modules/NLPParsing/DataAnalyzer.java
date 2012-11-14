@@ -2,7 +2,7 @@ package modules.NLPParsing;
 import java.io.*;
 import java.util.*;
 
-import modules.HTMLparsing.WikiWrapper_old;
+import modules.HTMLparsing.WikiWrapper;
 import modules.entities.Course;
 import modules.entities.Module;
 import modules.entities.University;
@@ -18,7 +18,7 @@ public class DataAnalyzer {
 	private HashSet<String> stopwords;
 	private HashMap<Course, List<Course>> similarCourses;
 	private int n; 
-	private WikiWrapper_old wiki;
+	private WikiWrapper wiki;
 
 	public DataAnalyzer(List<University> universities) {
 		this.universities = universities;
@@ -26,7 +26,7 @@ public class DataAnalyzer {
 		this.freq_doc = new HashMap<String, Integer>();
 		this.stopwords = new HashSet<String>();
 		this.similarCourses = new HashMap<Course, List<Course>>();
-		this.wiki = new WikiWrapper_old();
+		this.wiki = new WikiWrapper();
 		//createStopWordslist();
 		//calculateN();
 		//computeTF_IDF();
@@ -307,7 +307,7 @@ public class DataAnalyzer {
 
 			HashSet<String> modules = new HashSet<String>();
 			HashSet<String> allFormatedList = new HashSet<String>();
-			
+
 			for(String title : allModules) {
 				ArrayList<String> allCandidates = new ArrayList<String>();
 				modules.add(modifyString(title));
@@ -319,7 +319,7 @@ public class DataAnalyzer {
 					HashMap<String, Integer> counts = wiki.containWordsGivenPage(allCandidates, title.trim()); 
 					if(counts != null)
 						for(String b : counts.keySet()) {
-							if(!title.equals(b) && counts.get(b) > 0) {
+							if(!title.equals(b) && counts.get(b) > 0 && !modifyString(title).equals("")  &&  !modifyString(b).equals("")) {
 								out.write(modifyString(title) + " -> " + modifyString(b) + "\n");
 								allFormatedList.add(modifyString(title) + " -> " + modifyString(b));
 							}
@@ -377,13 +377,14 @@ public class DataAnalyzer {
 	}
 
 	private String modifyString(String s) {
-		String[] array = s.split(" ");
 		String mod = "";
-
-		if(null != array) {
-			for(int i = 0; i < array.length; i++){
-				mod += array[i].replaceAll("[^\\p{L}]", "_");
-				if(i != (array.length - 1)) mod += "_";
+		if(s != null) {
+			String[] array = s.split(" ");
+			if(null != array) {
+				for(int i = 0; i < array.length; i++){
+					mod += array[i].replaceAll("[^\\p{L}]", "_");
+					if(i != (array.length - 1)) mod += "_";
+				}
 			}
 		}
 		return mod;
