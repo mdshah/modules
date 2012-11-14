@@ -7,8 +7,8 @@ import modules.entities.Course;
 
 public class SentenceTester {
 	public static void main(String[] args) throws Exception {
-		Course c = new Course.Builder("junk").desc("@ 4.0. cr; Prereq-4603 or 5615 or # ; spring, every year. Sequel to MATH 4603. Topology of n-dimensional Euclidian space. Rigorous treatment of multivariable differentiation and integration, including chain rule, Taylor's Theorem, implicit function theorem, Fubini's Theorem, change of variables, Stokes' Theorem. Effective: Spring 2011.").build();
-		System.out.println(c.getDescParsed().get(1));
+		Course c = new Course.Builder("junk").desc("[11:20:01 PM] manu.shah89: Prereq-2243, [2283 or 3283]; Credit will not be granted if credit has been received for: 5705, 5707; fall, spring, every year. Existence, enumeration, construction, algorithms, optimization. Pigeonhole principle, bijective combinatorics, inclusion-exclusion, recursions, graph modeling, isomorphism. Degree sequences and edge counting. Connectivity, Eulerian graphs, trees, Euler.s formula, network flows, matching theory. Emphasizes mathematical induction as proof techniqu").build();
+		System.out.println(c.getDescParsed().get(0));
 		System.out.println(c.getModuleEntity());
 //		System.out.println(firstSubstring("yes wow nice"));
 	}

@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import modules.NLPParsing.mer.IterativeMER;
+import modules.NLPParsing.mer.ModuleEntityRecognizer;
+
 	/**
 	 * For each sentence in course description
 	 * getWords()
@@ -65,6 +68,10 @@ import java.util.regex.Pattern;
 			return chunks;
 		}
 		
+		public List<String> getNER(){
+			return ner;
+		}
+		
 		public List<String> getNouns() {
 			List<String> nouns = new LinkedList<String>();
 			for (int i = 0; i < stems.size(); i++) {
@@ -110,93 +117,8 @@ import java.util.regex.Pattern;
 		public List<String> getModuleEntity() throws Exception{
 			//need to take care of trigram
 			
-			List<String> moduleEntityList = new LinkedList<String>();
-			
-			//to keep track of one words that are used as an entity
-			boolean[] used = new boolean[stems.size()];
-			
-			for(int i=0;i<used.length;i++)
-				used[i] = false;
-				
-			
-			//Trigram filter
-			List<String> trigramWORDList = getNgrams(3);
-			List<String> trigramPOSList = getNgramsPosTags(3);
-			
-			Set<String> ruleset = new HashSet<String>();
-			ruleset.add("N P N"); //Taylor's theorem
-			ruleset.add("N I N");
-			ruleset.add("J N N");
-			for(int i=0; i< trigramPOSList.size();i++){
-//				System.out.println(getFirstChar(trigramPOSList.get(i)));
-				if(ruleset.contains(getFirstChar(trigramPOSList.get(i)))){
-					String[] tmp = trigramWORDList.get(i).split(" ");
-//					System.out.println("-------------------->" + tmp[0].toLowerCase());
-					//liberal. just check the first word to filter out stop module
-					if(!Stopwords.isStopwordModule(tmp[0].toLowerCase()) && !Stopwords.containsNumber(trigramWORDList.get(i)) && (ner.get(i).equals("O") || ner.get(i).equals("PERSON"))){
-//						System.out.println("added---->" + tmp[0].toLowerCase());
-						String candidate=trigramWORDList.get(i).toLowerCase();
-						if(getFirstChar(trigramPOSList.get(i)).equals("N P N") && candidate.contains("'s"))
-							candidate=candidate.replace(" 's","'s");
-						if(getFirstChar(trigramPOSList.get(i)).equals("N P N") && candidate.contains("formulum"))
-							candidate=candidate.replace("formulum", "formula");
-						moduleEntityList.add(candidate);
-						int offset=i;
-						used[offset]=true;
-						used[offset+1]=true;
-						used[offset+2]=true;
-					}
-				}
-			}
-			
-			//Bigram filter
-			List<String> bigramWORDList = getNgrams(2);
-			List<String> bigramPOSList = getNgramsPosTags(2);
-			
-			//define rules
-			//need to get more sophisticated
-			ruleset.add("J N");
-			ruleset.add("N N");
-			for(int i=0; i<bigramPOSList.size();i++){
-				if(used[i]){
-					continue;
-				}
-				if(ruleset.contains(getFirstChar(bigramPOSList.get(i)))){
-					String[] wordsSplits = bigramWORDList.get(i).split(" ");
-					boolean isStopword = false;
-					for(String s : wordsSplits){
-						if(Stopwords.isStopwordModule(s)){
-//							System.out.println("DEBUG: " + bigramWORDList.get(i)+ ":"+ s);
-							isStopword = true;
-							break;
-						} 
-					}
-					if(!isStopword && !Stopwords.containsNumber(bigramWORDList.get(i)) && (ner.get(i).equals("O") || ner.get(i).equals("PERSON"))){
-						moduleEntityList.add(bigramWORDList.get(i).toLowerCase());
-						//bigram
-						int offset=i;
-						used[offset]=true;
-						used[offset+1]=true;
-					}
-				}
-			}
-			
-			ruleset.add("N");
-			List<String> unigramWORDList = getNgrams(1);
-			List<String> unigramPOSList = getNgramsPosTags(1);
-			//unigram
-			for(int i=0;i < used.length;i++){
-				if(used[i])
-					continue;
-				String uniwordPOS = getFirstChar(unigramPOSList.get(i));
-				String uniword = unigramWORDList.get(i);
-				//Stopwords.isValidWord(uniword.toLowerCase()) &&
-				if( ner.get(i).equals("O") && !Stopwords.containsNumber(uniword.toLowerCase()) && ruleset.contains(uniwordPOS) && !Stopwords.isStopwordModule(uniword.toLowerCase()) &&  !Stopwords.isMeaninglessUnigram(uniword.toLowerCase())){
-						moduleEntityList.add(uniword.toLowerCase());
-				}
-			} 
-			
-			return moduleEntityList;
+			ModuleEntityRecognizer mer = new IterativeMER();
+			return mer.inferModuleFromSentence(this);
 			
 			
 		}
