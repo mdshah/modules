@@ -1,7 +1,5 @@
 package modules.HTMLparsing;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -88,10 +86,12 @@ public class WikiWrapper
                         continue;
                     wikiHits.put(token2[1].toLowerCase(), 1);
                 }
+                
                 // print line from URL
                 //System.out.println(inputLine); 
             } 
             in.close(); 
+            //downloadWikiPage(search);
 
         } catch (MalformedURLException me) { 
             System.out.println(me); 
@@ -105,6 +105,36 @@ public class WikiWrapper
         else
             return false;
     }
+    public boolean downloadWikiPage(String pageTitle)
+    {
+        String filename = returnTitlePage(pageTitle).trim().replace(' ', '_');
+        
+        if(filename == null)
+            return false;
+        
+        String pageTitle_Formatted = pageTitle.replace(' ', '_');
+        try { 
+            FileWriter fstream = new FileWriter(".\\cachedHits\\" + filename +".txt");
+            BufferedWriter out = new BufferedWriter(fstream);
+            
+            URL wikipedia = new URL("http://en.wikipedia.org/wiki/" + pageTitle_Formatted); 
+            BufferedReader in = new BufferedReader(new InputStreamReader(wikipedia.openStream())); 
+            String inputLine; 
+            while ((inputLine = in.readLine()) != null) {       
+                out.write(inputLine);
+                //System.out.println(inputLine);
+            } 
+            in.close(); 
+            out.close();
+
+        } catch (MalformedURLException me) { 
+            System.out.println(me); 
+
+        } catch (IOException ioe) { 
+            System.out.println(ioe); 
+        }
+        return true;
+    }
     
     /* pass in an array list of words to check in wiki page, if a specific page does
      * not exist it will return null. It will return a hashMap of words found in the page
@@ -113,15 +143,16 @@ public class WikiWrapper
     {
         if(words == null)
             return null;
-        HashMap<String, Integer> contains = new HashMap();
         
-        /* ensure that pageTitle exists */
+        /* ensure that pageTitle exists 
         if(!hasWikiPage(pageTitle))
         {
             System.err.println("Page title does not exist");
             return null;
         }
-        
+        */
+        HashMap<String, Integer> contains = new HashMap();
+
         int wordsFound = 0;
         String pageTitle_Formatted = pageTitle.replace(' ', '_');
         try { 
@@ -171,12 +202,13 @@ public class WikiWrapper
         if(pageTitle == null)
             return null;
         
-        /* ensure that pageTitle exists */
+        /* ensure that pageTitle exists 
         if(!hasWikiPage(pageTitle))
         {
             System.err.println("Page title does not exist");
             return null;
         }
+        */
         String pageTitle_Formatted = pageTitle.replace(' ', '_');
         try { 
             URL wikipedia = new URL("http://en.wikipedia.org/wiki/" + pageTitle_Formatted); 
